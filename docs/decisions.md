@@ -1,24 +1,23 @@
 # Registro de decisões — aplicação de artesanato
 
-Última atualização: 10/11/2026.
+Última atualização: 11/11/2026.
 
 Este arquivo acompanha o planejamento da aplicação. As decisões confirmadas estão separadas das propostas e das questões em aberto. Será atualizado conforme a conversa avançar. Ainda não é a especificação final do projeto nem um plano de implementação aprovado.
 
 ## Como ler este registro
 
-- **Confirmado:** decisões D01–D14, que orientam o produto.
+- **Confirmado:** decisões D01–D17, que orientam o produto e a arquitetura aprovada.
 - **Proposta:** alternativa para discussão, sem autorização de implementação.
 - **Em aberto:** definição necessária antes da entrega correspondente.
 - **Pesquisa:** referência histórica com data e fonte; não equivale a decisão.
 - **Tarefa de planejamento:** trabalho para esclarecer escopo e critérios, sem funcionalidade entregue.
 
-**Estado atual:** planejamento do produto, com bootstrap técnico autorizado em 10/11/2026: Svelte 5 + TypeScript + Vite 8 e binário Rust edição 2024. Não há funcionalidades de domínio. Framework HTTP, banco e provedores ainda precisam ser escolhidos. O projeto integrador modular permanece uma recomendação não confirmada.
+**Estado atual:** planejamento do produto, com bootstrap técnico autorizado em 10/11/2026: Svelte 5 + TypeScript + SvelteKit 3 + Vite+ 1.5.1 e binário Rust edição 2024. Não há funcionalidades de domínio. Framework HTTP, banco e provedores ainda precisam ser escolhidos. O projeto integrador modular permanece uma recomendação não confirmada.
 
 ### Navegação
 
 - [Objetivo](#objetivo)
 - [Decisões confirmadas](#decisões-confirmadas)
-- [Tarefas de planejamento](#tarefas-de-planejamento)
 - [Tarefas de planejamento](#tarefas-de-planejamento)
 - [Plano de conteúdos de IA](ia-study-plan.md)
 - [Roadmap de fases](../ROADMAP.md)
@@ -98,6 +97,10 @@ O aprendizado técnico usa Svelte no frontend e Rust no backend. O plano de cont
 ### D16 — Escopo do aprendizado
 
 O plano não inclui atividades de carreira e entrevistas. Documentação, demonstração e avaliação técnica do projeto integrador fazem parte do trabalho; OKRs permanecem como assunto de gestão do projeto.
+
+### D17 — Framework do frontend
+
+O frontend usará SvelteKit 3 sobre Svelte 5 e TypeScript. SvelteKit será responsável por rotas, carregamento e renderização da aplicação. Regras de negócio e dados autoritativos permanecem no backend Rust; a escolha do framework HTTP do backend continua em aberto. `adapter-auto` fica configurado até a hospedagem ser definida.
 
 ## Tarefas de planejamento
 
@@ -254,6 +257,8 @@ Depois dessas definições, comparar abordagens de construção, propor a arquit
 - Esse prazo operacional de repasse não será tratado como prazo final para todos os direitos de reclamação, devolução ou reembolso.
 
 ## Histórico
+
+- **11/11/2026 — Framework do frontend:** confirmação da adoção de SvelteKit 3. A decisão estabelece o framework de aplicação do frontend sem definir hospedagem, backend HTTP ou funcionalidades de produto.
 
 - **10/11/2026 — Roadmap independente:** apresentação do planejamento como documento técnico próprio do projeto, preservando tarefas, critérios e IDs.
 

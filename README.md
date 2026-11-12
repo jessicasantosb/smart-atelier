@@ -1,38 +1,83 @@
 # Smart Atelier
 
-Aplicação de artesanato voltada a aprendizado e portfólio. O repositório contém somente a inicialização técnica; funcionalidades de produto ainda não foram implementadas.
+Smart Atelier is a craft marketplace project for learning and portfolio work. The repository currently contains initialized frontend and backend projects; marketplace features have not been implemented.
 
-- `frontend/`: template oficial Svelte 5 + TypeScript + Vite, gerado com create-vite 9.3.4.
-- `backend/`: binário Rust, edição 2024, sem dependências, servidor ou rotas.
-- `database/`: reservado; banco e migrações ainda não definidos.
-- [Decisões e planejamento](docs/decisions.md), [estado da arquitetura](docs/architecture.md) e [regras](docs/rules/README.md).
+## Project structure
 
-## Frontend
+- `frontend/`: Svelte 5, TypeScript, SvelteKit 3, and Vite+ 1.5.1 application starter.
+- `backend/`: Rust 2024 binary starter with no dependencies, HTTP server, or routes.
+- `database/`: reserved; database, schema, and migrations are not defined.
+- `docs/decisions.md`: confirmed product decisions, proposals, and open tasks.
+- `docs/architecture.md`: current technical state and pending architecture choices.
+- `docs/rules/`: project, Rust, and Svelte development rules.
+- `docs/ia-study-plan.md`: technical learning coverage mapped to Rust and Svelte.
 
-Use Node compatível com Vite 8 (20.19+ ou 22.12+ nas linhas suportadas) e npm. O init foi preparado com Node 24.22.1.
+Read [AGENTS.md](AGENTS.md) and the relevant [development rules](docs/rules/README.md) before making changes. All source code, identifiers, comments, tests, configuration examples, and user-facing application content must be in English. Project documentation may remain in its current language.
+
+## Tools and technologies
+
+| Area | Technology | Current use |
+| --- | --- | --- |
+| Tool version management | [mise](https://mise.jdx.dev/) | Reads the root `mise.toml`, which pins Bun 1.4.4 and Rust 1.99.1 with Cargo, rustfmt, and Clippy. |
+| Frontend runtime and package manager | [Bun](https://bun.sh/) | Install dependencies and run frontend scripts; `frontend/bun.lock` is the Bun lockfile. |
+| Frontend | Svelte 5, TypeScript, SvelteKit 3, Vite 8 | Routing and rendering framework; no marketplace workflows yet. |
+| Frontend adapter | `@sveltejs/adapter-auto` | Temporary deployment adapter while hosting remains undecided. |
+| UI components | shadcn-svelte, Bits UI, Tailwind CSS 4, Lucide | shadcn-svelte configuration and reusable UI dependencies are present. |
+| Frontend toolchain | [Vite+](https://viteplus.dev/) 1.5.1 | Vite/Rolldown, Oxlint, Oxfmt, and Vitest; configured from `frontend/vite.config.ts`. |
+| Frontend Svelte checks | `svelte-check`, TypeScript | Validates Svelte components and TypeScript; included in `bun run check`. |
+| Frontend tests | Vitest 5.1.0, Svelte Testing Library, jsdom | Unit and component testing; a Counter interaction test demonstrates the setup. |
+| Backend | Rust 2024 | Minimal binary starter. |
+| Security scanning | Not configured | Semgrep is a candidate for SAST across Rust and TypeScript; `cargo-audit` is a candidate for Rust dependency advisory checks. Neither is installed or configured. |
+
+The HTTP framework, async runtime, database, authentication provider, hosting, payment provider, and AI services remain undecided. Do not treat listed frontend dependencies as completed product capabilities.
+
+## Setup
+
+Install [mise](https://mise.jdx.dev/) and then install the Bun and Rust toolchains declared by the repository:
 
 ```sh
-cd frontend
-npm ci
-npm run dev
+mise install
 ```
 
-Verificações: `npm run check` e `npm run build`. Prévia do build: `npm run preview`. A tela e o contador são exemplos originais do template; não representam funcionalidades do marketplace. SvelteKit não foi adicionado.
-
-## Backend
-
-Instale uma toolchain Rust com suporte à edição 2024 (Rust 1.85+), Cargo, rustfmt e Clippy.
+To run frontend commands through mise, from the repository root:
 
 ```sh
-cd backend
-cargo run
+mise exec -- bun --cwd frontend install --frozen-lockfile
+mise exec -- bun --cwd frontend run dev
 ```
 
-O programa imprime `Hello, world!`. Na primeira execução, Cargo gera `Cargo.lock`; versione esse arquivo por se tratar de uma aplicação. Depois use `cargo check --locked`, `cargo test --locked`, `cargo fmt --check` e `cargo clippy --all-targets --locked -- -D warnings`.
+Alternatively, change into `frontend/` and run `mise exec -- bun install --frozen-lockfile` followed by `mise exec -- bun run dev`.
 
-Cargo não estava disponível no ambiente de inicialização: a estrutura mínima foi criada manualmente, equivalente a um `cargo init --bin`. Compilação e execução do backend ainda precisam ser verificadas em um ambiente com Rust.
+## Frontend commands
 
-## Cobertura de IA aplicada
+Run from `frontend/` (prefix each command with `mise exec --` if mise's tool environment is not already active):
 
-A [plano de conteúdos de IA](docs/ia-study-plan.md) organiza os tópicos de engenharia de software e IA aplicada em aplicação no projeto, exercícios separados e teoria, com tarefas, critérios e evidências esperadas. Stack adaptada para Svelte/Rust; carreira excluída. Estado inicial: planejado, sem entregas de IA concluídas.
+```sh
+bun install --frozen-lockfile
+bun run dev
+bun run check
+bun run lint
+bun run format:check
+bun run test
+bun run build
+```
 
+Use `bun run format` to apply formatting and `bun run preview` to preview a production build. Use `bun run test:watch` for interactive test development. Vite+ formats Svelte components as well as TypeScript, styles, and project configuration. See [frontend/README.md](frontend/README.md) for details.
+
+## Backend commands
+
+Run the Rust commands from `backend/`; `mise install` at the repository root provides the configured Rust toolchain and Cargo tools:
+
+```sh
+mise exec -- cargo run
+mise exec -- cargo check
+mise exec -- cargo fmt --check
+mise exec -- cargo test --locked
+mise exec -- cargo clippy --all-targets --locked -- -D warnings
+```
+
+Cargo should generate the initial `Cargo.lock` when `mise exec -- cargo check` runs; commit that lockfile for the application. Backend compilation and execution have not yet been verified with the project-pinned toolchain.
+
+## Product and learning plans
+
+See [product decisions and tasks](docs/decisions.md), the [AI learning plan](docs/ia-study-plan.md), and the [application roadmap](ROADMAP.md). Planned learning exercises do not automatically become marketplace features or authorize external costs.

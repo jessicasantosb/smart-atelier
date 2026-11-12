@@ -1,18 +1,23 @@
 # Frontend — Smart Atelier
 
-Template oficial `svelte-ts` do create-vite 9.3.4: Svelte 5, TypeScript e Vite 8, sem SvelteKit. Tela, estilos e contador originais preservados; ainda não há funcionalidades do marketplace.
+Frontend com Svelte 5, TypeScript e SvelteKit 3, executado pelo Vite+ 1.5.1. A rota inicial mantém a tela de demonstração do template; ainda não há funcionalidades do marketplace. SvelteKit fornece roteamento, carregamento de páginas e renderização. `@sveltejs/adapter-auto` está configurado até que a hospedagem seja definida.
 
-Use Node compatível com Vite 8 (20.19+ ou 22.12+ nas linhas suportadas) e npm.
+Use Bun 1.4.4 declarado em `mise.toml` e Node.js 22.17 ou superior, requisito mínimo do SvelteKit 3.
 
 ```sh
-npm ci
-npm run dev
+bun install --frozen-lockfile
+bun run dev
 ```
 
-- `npm run check`: svelte-check e TypeScript.
-- `npm run build`: build de produção.
-- `npm run preview`: prévia local do build.
+- `bun run check`: sincroniza os tipos do SvelteKit, executa Vite+ check, svelte-check e TypeScript.
+- `bun run test`: testes unitários e de componentes com Vitest.
+- `bun run test:watch`: executa os testes em modo de observação.
+- `bun run lint`: lint com Oxlint, integrado pelo Vite+.
+- `bun run format`: formata arquivos do frontend, incluindo componentes Svelte, com Oxfmt.
+- `bun run format:check`: verifica formatação sem alterar arquivos.
+- `bun run build`: build de produção.
+- `bun run preview`: prévia local do build.
 
-As dependências resolvidas estão em package-lock.json. Não há lint ou testes automatizados configurados. Consulte as [regras Svelte](../docs/rules/svelte.md) antes de implementar funcionalidades.
+As dependências resolvidas estão em `bun.lock`; `package-lock.json` foi removido para manter Bun como único gerenciador de pacotes. Vite+ integra Vite/Rolldown, Oxlint, Oxfmt e Vitest. `svelte-check` e TypeScript complementam `vp check` para verificar os componentes Svelte. Os testes de componentes usam Svelte Testing Library em ambiente jsdom. Consulte as [regras Svelte](../docs/rules/svelte.md) antes de implementar funcionalidades.
 
-Na inicialização, svelte-check retornou zero erros e avisos, TypeScript passou e o build foi concluído. Os executáveis locais foram chamados via Node, pois npm só estava disponível temporariamente. A instalação reportou dois alertas de vulnerabilidade de baixa severidade; nenhuma atualização automática foi aplicada.
+Validação da integração SvelteKit: `bun install --frozen-lockfile`, `bun run check`, `bun run test`, `bun run format:check` e `bun run build` passaram. O adapter automático concluiu o build, mas ainda não seleciona um destino de produção porque a hospedagem não foi definida.

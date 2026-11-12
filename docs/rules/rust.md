@@ -1,6 +1,6 @@
 # Rust — backend
 
-Backend inicializado como binário Rust edição 2024 (requer Rust 1.85+), sem dependências. Runtime, framework e crates permanecem por definir; estas regras não instalam dependências. A estrutura foi criada manualmente por ausência de Cargo no ambiente; gere e versione Cargo.lock ao validar com uma toolchain Rust.
+Backend inicializado como binário Rust edição 2024 (requer Rust 1.85+), sem dependências. Runtime, framework e crates permanecem por definir; estas regras não instalam dependências. A estrutura foi criada manualmente por ausência de Cargo no ambiente de bootstrap; gere e versione Cargo.lock ao validar com uma toolchain Rust. Siga o [AGENTS.md](../../AGENTS.md): código, identificadores, comentários, testes e exemplos de configuração devem estar em inglês.
 
 ## Tipos e ownership
 

@@ -2,7 +2,7 @@
 
 ## Escopo confirmado
 
-- A fonte de decisões de produto é [docs/decisions.md](docs/decisions.md). Preserve os IDs D01–D16 e diferencie confirmação, proposta e pendência.
+- A fonte de decisões de produto e arquitetura aprovada é [docs/decisions.md](../decisions.md). Preserve os IDs D01–D17 e diferencie confirmação, proposta e pendência.
 - Toda pessoa começa como compradora; criar loja habilita a atuação como vendedora. A continuidade das compras e a quantidade de lojas por conta ainda precisam ser definidas.
 - Um trabalho pode existir sem estar à venda. Não confunda cadastro, visibilidade, estoque e disponibilidade; seus detalhes ainda estão em discussão.
 - Preserve pedidos internos, negociação de orçamento e chat humano. Assistência de IA é adicional e depende de escopo aprovado.
@@ -20,6 +20,8 @@
 - Quando houver banco, versione alterações de schema e migrações; documente integridade, índices necessários e estratégia para dados existentes. Não execute migrações destrutivas sem autorização.
 
 ## Segurança, integrações e IA
+
+- Siga o requisito de idioma do [AGENTS.md](../../AGENTS.md): código, identificadores, comentários, testes, exemplos de configuração e textos da aplicação em inglês. Documentação do projeto pode permanecer no idioma atual.
 
 - Não registre tokens, credenciais ou conteúdo privado desnecessário em logs. Use configuração de ambiente e exemplos sem segredos.
 - Pagamentos devem ser confirmados por integração autenticada, nunca por imagem de comprovante. Ao implementar, teste eventos duplicados, fora de ordem e falhas sem duplicar efeitos financeiros.
