@@ -1,6 +1,6 @@
 # Smart Atelier
 
-Smart Atelier is a craft marketplace project for learning and portfolio work. The repository currently contains initialized frontend and backend projects; marketplace features have not been implemented.
+Smart Atelier is a craft marketplace project for learning and portfolio work. The frontend includes a navigable prototype of the maker and buyer journeys using local sample data. It does not create accounts, publish products, process payments, track shipments, or initiate transfers. The Rust backend remains an initialized binary without an HTTP server.
 
 ## Project structure
 
@@ -16,18 +16,18 @@ Read [AGENTS.md](AGENTS.md) and the relevant [development rules](docs/rules/READ
 
 ## Tools and technologies
 
-| Area | Technology | Current use |
-| --- | --- | --- |
-| Tool version management | [mise](https://mise.jdx.dev/) | Reads the root `mise.toml`, which pins Bun 1.4.4 and Rust 1.99.1 with Cargo, rustfmt, and Clippy. |
-| Frontend runtime and package manager | [Bun](https://bun.sh/) | Install dependencies and run frontend scripts; `frontend/bun.lock` is the Bun lockfile. |
-| Frontend | Svelte 5, TypeScript, SvelteKit 3, Vite 8 | Routing and rendering framework; no marketplace workflows yet. |
-| Frontend adapter | `@sveltejs/adapter-auto` | Temporary deployment adapter while hosting remains undecided. |
-| UI components | shadcn-svelte, Bits UI, Tailwind CSS 4, Lucide | shadcn-svelte configuration and reusable UI dependencies are present. |
-| Frontend toolchain | [Vite+](https://viteplus.dev/) 1.5.1 | Vite/Rolldown, Oxlint, Oxfmt, and Vitest; configured from `frontend/vite.config.ts`. |
-| Frontend Svelte checks | `svelte-check`, TypeScript | Validates Svelte components and TypeScript; included in `bun run check`. |
-| Frontend tests | Vitest 5.1.0, Svelte Testing Library, jsdom | Unit and component testing; a Counter interaction test demonstrates the setup. |
-| Backend | Rust 2024 | Minimal binary starter. |
-| Security scanning | Not configured | Semgrep is a candidate for SAST across Rust and TypeScript; `cargo-audit` is a candidate for Rust dependency advisory checks. Neither is installed or configured. |
+| Area                                 | Technology                                     | Current use                                                                                                                                                       |
+| ------------------------------------ | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tool version management              | [mise](https://mise.jdx.dev/)                  | Reads the root `mise.toml`, which pins Bun 1.4.4 and Rust 1.99.1 with Cargo, rustfmt, and Clippy.                                                                 |
+| Frontend runtime and package manager | [Bun](https://bun.sh/)                         | Install dependencies and run frontend scripts; `frontend/bun.lock` is the Bun lockfile.                                                                           |
+| Frontend                             | Svelte 5, TypeScript, SvelteKit 3, Vite 8      | Routing and rendering for the maker workspace, public shop and product, and simulated buyer checkout journey.                                                     |
+| Frontend adapter                     | `@sveltejs/adapter-auto`                       | Temporary deployment adapter while hosting remains undecided.                                                                                                     |
+| UI components                        | shadcn-svelte, Bits UI, Tailwind CSS 4, Lucide | shadcn-svelte configuration and reusable UI dependencies are present.                                                                                             |
+| Frontend toolchain                   | [Vite+](https://viteplus.dev/) 1.5.1           | Vite/Rolldown, Oxlint, Oxfmt, and Vitest; configured from `frontend/vite.config.ts`.                                                                              |
+| Frontend Svelte checks               | `svelte-check`, TypeScript                     | Validates Svelte components and TypeScript; included in `bun run check`.                                                                                          |
+| Frontend tests                       | Vitest 5.1.0, Svelte Testing Library, jsdom    | Unit and component tests for sample data, API status, and prototype screens.                                                                                      |
+| Backend                              | Rust 2024                                      | Minimal binary starter.                                                                                                                                           |
+| Security scanning                    | Not configured                                 | Semgrep is a candidate for SAST across Rust and TypeScript; `cargo-audit` is a candidate for Rust dependency advisory checks. Neither is installed or configured. |
 
 The HTTP framework, async runtime, database, authentication provider, hosting, payment provider, and AI services remain undecided. Do not treat listed frontend dependencies as completed product capabilities.
 
