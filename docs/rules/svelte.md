@@ -1,6 +1,6 @@
 # Svelte — frontend
 
-Frontend com Svelte 5, TypeScript, SvelteKit 3 e Vite+ 1.5.1. SvelteKit controla rotas, carregamento de páginas, renderização e integração com o backend quando ela for definida. Mantenha regras de negócio e dados autoritativos no backend Rust; não use endpoints ou actions do SvelteKit como uma segunda API de domínio. Consulte `frontend/package.json` e `frontend/bun.lock` para as dependências. A página inicial ainda preserva a tela de demonstração do template. Todo texto visível na interface deve estar em inglês, conforme o [AGENTS.md](../../AGENTS.md); a documentação pode permanecer em português.
+Frontend com Svelte 5, TypeScript, SvelteKit 3 e Vite+ 1.5.1. SvelteKit controla rotas, carregamento e renderização. Chamadas à API Rust ficam em repositórios da funcionalidade; regras de negócio e dados autoritativos permanecem no Rust. A tela inicial apresenta apenas estado de conectividade da API, sem fluxos de produto. Consulte `frontend/package.json` e `frontend/bun.lock` para dependências. Todo texto visível na interface deve estar em inglês, conforme o [AGENTS.md](../../AGENTS.md); a documentação pode permanecer em português.
 
 ## Organização e estado
 

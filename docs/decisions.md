@@ -1,18 +1,18 @@
 # Registro de decisões — aplicação de artesanato
 
-Última atualização: 11/11/2026.
+Última atualização: 12/11/2026.
 
 Este arquivo acompanha o planejamento da aplicação. As decisões confirmadas estão separadas das propostas e das questões em aberto. Será atualizado conforme a conversa avançar. Ainda não é a especificação final do projeto nem um plano de implementação aprovado.
 
 ## Como ler este registro
 
-- **Confirmado:** decisões D01–D17, que orientam o produto e a arquitetura aprovada.
+- **Confirmado:** decisões D01–D17 e definições aprovadas nas tarefas T01, T02 e T08, nos limites descritos abaixo.
 - **Proposta:** alternativa para discussão, sem autorização de implementação.
 - **Em aberto:** definição necessária antes da entrega correspondente.
 - **Pesquisa:** referência histórica com data e fonte; não equivale a decisão.
 - **Tarefa de planejamento:** trabalho para esclarecer escopo e critérios, sem funcionalidade entregue.
 
-**Estado atual:** planejamento do produto, com bootstrap técnico autorizado em 10/11/2026: Svelte 5 + TypeScript + SvelteKit 3 + Vite+ 1.5.1 e binário Rust edição 2024. Não há funcionalidades de domínio. Framework HTTP, banco e provedores ainda precisam ser escolhidos. O projeto integrador modular permanece uma recomendação não confirmada.
+**Estado atual:** fase 0 concluída no planejamento e fase 1 concluída na base técnica. A API Axum/Tokio, conexões PostgreSQL/Redis, verificações de saúde, conectividade inicial do frontend, configuração de desenvolvimento e CI estão implementadas; as verificações locais de Rust e frontend passaram. O uso do Compose com serviços ativos e uma execução remota do GitHub Actions ainda não foram validados neste ambiente. Ainda não há funcionalidades de domínio, schema de negócio ou fila assíncrona. T01, T02 e T08 estão definidos; operações e entidades candidatas estão registradas em `docs/architecture.md`. O projeto é um integrador modular para construir a aplicação completa. A prioridade aprovada está no [roadmap](../ROADMAP.md). A demonstração percorre o caminho de uma peça pronta, do cadastro à venda e entrega. Além da base acima, a arquitetura definida prevê Stripe em modo de teste, Ship24 no plano grátis de 10 rastreamentos mensais (Correios é a cobertura mínima a validar), Ollama local, armazenamento local de imagens e túnel HTTPS temporário para webhooks. Hospedagem e provedores de produção continuam em aberto.
 
 ### Navegação
 
@@ -100,22 +100,58 @@ O plano não inclui atividades de carreira e entrevistas. Documentação, demons
 
 ### D17 — Framework do frontend
 
-O frontend usará SvelteKit 3 sobre Svelte 5 e TypeScript. SvelteKit será responsável por rotas, carregamento e renderização da aplicação. Regras de negócio e dados autoritativos permanecem no backend Rust; a escolha do framework HTTP do backend continua em aberto. `adapter-auto` fica configurado até a hospedagem ser definida.
+O frontend usará SvelteKit 3 sobre Svelte 5 e TypeScript. SvelteKit será responsável por rotas, carregamento e renderização da aplicação. Regras de negócio e dados autoritativos permanecem no backend Rust. `adapter-auto` fica configurado até a hospedagem ser definida.
 
 ## Tarefas de planejamento
 
-Organização proposta das pendências existentes, sem prazo, responsável ou implementação aprovados. Todas estão **a definir**. A sequência orienta a discussão; não é compromisso de execução.
+Organização do planejamento. As definições de T01, T02 e T08 estão confirmadas; isso não significa que as funcionalidades foram implementadas. As demais tarefas continuam em aberto, sem prazo ou responsável aprovados.
 
 | ID | Tarefa e resultado esperado | Dependências | Critério de conclusão do planejamento |
 | --- | --- | --- | --- |
-| T01 | Escolher projeto integrador modular ou estudos independentes. | D13 e D14. | Escolha confirmada, com justificativa e consequências registradas. |
-| T02 | Delimitar a primeira demonstração e seus objetivos de aprendizado. | T01. | Jornada, escopo incluído/excluído, dados e evidências esperadas definidos. |
-| T03 | Definir conta, loja e trabalho: papéis, quantidade de lojas, visibilidade e disponibilidade. | T02; D02–D05. | Regras e cenários de aceite revisados, distinguindo registro, vitrine e venda. |
+| T01 | Organizar o aprendizado em torno de um projeto integrador modular completo, usando laboratórios e teoria para tópicos que não se encaixem no produto. | D13–D16. | **Concluída (planejamento).** Abordagem e limites registrados abaixo. |
+| T02 | Definir a jornada e os limites da primeira demonstração integrada. | T01. | **Concluída (planejamento).** Caminho, inclusões, exclusões e critérios registrados abaixo. |
+| T03 | Detalhar regras completas de conta, loja e trabalho além do recorte demonstrável. | T02; D02–D05. | Demonstração cobre conta, criação de loja e publicação de uma peça pronta; quantidade de lojas, papéis completos, visibilidade e demais estados de trabalho ainda serão definidos. |
 | T04 | Detalhar orçamento, chat e pedido: conteúdo, aceite, alterações e acompanhamento. | T02 e T03; D06–D08 e D11. | Fluxo, estados, permissões, erros e critérios de aceite descritos. |
-| T05 | Definir entrega, pagamento e repasse, avaliando a viabilidade do provedor. | T02 e T04; D09, D11 e D12. | Provedor, ambiente, comprovação, prazos, disputas e responsabilidades definidos. Sete dias segue proposta. |
+| T05 | Detalhar entrega, pagamento e repasse para além do caminho de teste da demonstração. | T02 e T04; D09, D11 e D12. | Stripe Connect/Ship24 escolhidos apenas para sandbox; produção, comprovação em disputas, prazos, responsabilidades e tratamento financeiro continuam pendentes. Sete dias segue proposta. |
 | T06 | Definir indicadores e necessidades de suporte. | T02; eventos de pedido e pagamento; D10. | Indicadores têm significado, fonte e exemplos; suporte e permissões descritos. |
-| T07 | Selecionar a primeira experiência de IA, se incluída na demonstração. | T02; D13 e D14. | Tarefa, dados autorizados, revisão humana, baseline, métricas e limites de custo definidos. |
-| T08 | Consolidar arquitetura e especificação da entrega para revisão. | T02 e definições T03–T07 aplicáveis ao recorte. | Contratos frontend/backend, persistência, versões, testes e integrações documentados; pendências explícitas e aprovação registrada antes de implementar. |
+| T07 | Selecionar a primeira experiência de IA para a demonstração. | T02; D13 e D14. | **Experiência definida:** rascunho de título e descrição a partir de dados e fotos, com revisão do artesão. Métricas de qualidade e limites operacionais ainda devem ser detalhados. |
+| T08 | Consolidar a arquitetura modular e a especificação técnica inicial da demonstração. | T02 e decisões aplicáveis de T03–T07. | **Concluída (planejamento).** Componentes, operações candidatas, entidades, estados, consistência, testes e limites externos estão em `docs/architecture.md`. Schemas/rotas finais se refinam antes de cada implementação; Correios será validado antes da integração Ship24. |
+
+### T01 — Construir a aplicação completa como projeto integrador modular
+
+- **Estado:** concluída no planejamento.
+- **Decisão:** Smart Atelier será o projeto integrador para construir uma aplicação completa. Os tópicos de IA serão aplicados ao produto quando forem adequados; os demais serão cobertos por exercícios independentes ou estudo teórico, sem virarem funcionalidades artificiais do marketplace.
+- **Limite:** atividades de carreira e entrevistas permanecem excluídas (D16). A matriz de cobertura organiza aplicação, laboratório e teoria, mas não autoriza custos nem execução automática de todos os exercícios.
+- **Critério de conclusão do planejamento:** abordagem e separação entre produto, laboratórios e teoria aprovadas e registradas.
+
+### T02 — Demonstrar uma venda de peça pronta, da loja à entrega
+
+- **Estado:** concluída no planejamento; detalhes operacionais permanecem nas pendências indicadas.
+- **Jornada:** cadastro de conta; criação da loja do artesão; cadastro de uma peça pronta com fotos e informações fornecidas pelo artesão; geração de rascunho de título e descrição pela IA; revisão/edição e aprovação pelo artesão; abertura direta da página pública da loja ou do produto; cadastro/entrada do comprador; checkout direto de um único item; pagamento em ambiente de teste; envio e acompanhamento por rastreamento; evento de entrega; repasse de teste ao vendedor.
+- **Identidade e venda:** login próprio e Google resolvem para a mesma conta interna; a conta de comprador precisa estar autenticada antes de iniciar o checkout. O artesão deve concluir o onboarding Stripe Connect de teste antes de publicar itens à venda. Uma conta Smart Atelier pode atuar como compradora e vendedora; a demonstração pode usar contas separadas para representar os dois papéis.
+- **Cadastro do produto:** fotos (uma ou mais), categoria/tipo, materiais, técnica, medidas com unidades (ou indicação explícita de não aplicável), preço e moeda, quantidade disponível. Peça única começa com quantidade 1. Cor, acabamento e instruções de cuidado são opcionais. A IA não deduz nem altera preço, materiais, medidas ou estoque.
+- **IA:** gerar somente proposta de título e descrição com base nas informações e fotos fornecidas. A publicação depende de revisão e aprovação humana. Na demonstração, o modelo será executado localmente com Ollama por uma interface de provedor substituível.
+- **Compra:** uma peça pronta por pedido, compra iniciada diretamente na página pública do item; sem carrinho com múltiplos itens ou lojas nesta demonstração. O endereço de entrega é coletado no Smart Atelier antes de abrir o checkout e fica associado ao pedido.
+- **Pagamento:** checkout hospedado pelo Stripe; somente cartão de teste; moeda única BRL. Ao iniciar o checkout, o estoque fica reservado por 30 minutos, alinhado ao prazo mínimo configurável da sessão Stripe ([documentação da Checkout Session](https://docs.stripe.com/api/checkout/sessions/create)). Uma recusa de tentativa mantém sessão, pedido e reserva ativos para que o comprador possa tentar outro cartão; liberar o estoque somente após expiração final confirmada sem pagamento. A confirmação do navegador não é fonte de verdade: o backend confirma o pagamento por evento autenticado do Stripe. Endereço é coletado no Smart Atelier antes do redirecionamento, apagado se a sessão expirar sem pagamento e mantido no pedido pago para envio/acompanhamento.
+- **Repasse de demonstração:** usar Stripe Connect em modo de teste com o fluxo *separate charges and transfers* ([documentação do Stripe Connect](https://docs.stripe.com/connect/separate-charges-and-transfers)). Quando Ship24 confirmar “entregue”, o backend inicia uma única transferência de 100% do valor do item ao saldo Stripe do artesão, sem comissão da plataforma na demonstração. O repasse bancário subsequente segue o cronograma da conta Connect. Eventos repetidos/fora de ordem e retries não podem duplicar ou antecipar a transferência. Esse arranjo é exclusivamente de teste; o modelo de produção segue em aberto.
+- **Entrega:** Ship24 foi aprovado como integração da demonstração. O plano gratuito consultado oferece API/webhooks para até 10 rastreamentos por mês, sem excedente faturado; ao atingir a cota, o rastreamento para até a renovação ([planos e cotas do Ship24](https://help.ship24.com/en/article/ship24-pricing-and-plans-explained-425d9d/)). O teste inicial de cobertura será dos Correios; a lista atualizada de transportadoras pode ser consultada na API/dashboard do provedor ([documentação de transportadoras](https://docs.ship24.com/couriers)). Depois do envio, o artesão informa transportadora e código de rastreio, que passam a ser acompanhados no Smart Atelier e no Ship24. Não exceder 10 rastreamentos por mês no demo. Emissão de etiqueta, cálculo de frete e cotação de frete ficam fora deste recorte.
+- **Inclui:** cadastro de contas, criação de loja, página pública direta de loja/produto, experiência assistida por IA e venda de ponta a ponta em sandbox/teste.
+- **Não inclui nesta demonstração:** encomendas/orçamentos, chat, busca/catálogo para descoberta, carrinho multi-item/multi-loja, produção de peça personalizada, cancelamento após pagamento, reembolsos, disputas, operação de pagamento real ou lançamento comercial. Esses fluxos ficam para as fases de expansão.
+- **Fluxo do pedido:** `awaiting_payment` (Checkout ativo; estoque reservado) → `paid` (webhook autenticado do Stripe) → `shipped` (artesão informa transportadora e código) → `delivered` (Ship24) → `transfer_pending` → `transferred`. Recusa de cartão não encerra sessão nem libera estoque; `checkout.session.expired` sem pagamento encerra a tentativa e libera a unidade. A fila Redis agenda o trabalho assíncrono; estado e idempotência permanecem no PostgreSQL/Stripe.
+- **Testes:** automação local/CI com serviços simulados para Stripe, Ship24 e Ollama; roteiro manual de sandbox para confirmar integração real, webhooks e transferência, respeitando as credenciais de teste e a cota de 10 rastreamentos/mês. Nenhum teste automatizado de CI deve consumir a quota do Ship24.
+- **Critério de conclusão do planejamento:** jornada, fronteiras, fluxo principal, reserva de estoque, tratamento do endereço, exclusões e estratégia de validação aprovados. Cobertura Correios/Ship24 continua como gate antes da integração; se tracking estiver em exceção ou indisponível, não há transferência automática.
+
+### T08 — Arquitetura inicial para a demonstração
+
+- **Estado:** arquitetura inicial aprovada; funcionalidades e contratos detalhados ainda não implementados.
+- **Forma:** monólito modular; frontend SvelteKit comunica-se por HTTP/JSON com API Rust. O Rust é a autoridade para regras de negócio, autorização, pedidos, pagamento e integração. Não introduzir microserviços na demonstração.
+- **Backend e dados:** Axum + Tokio para HTTP assíncrono; PostgreSQL + SQLx para persistência; Redis para filas e retries de tarefas assíncronas. PostgreSQL mantém o estado autoritativo e o registro/idempotência dos eventos; Redis agenda processamento, não substitui a persistência do domínio.
+- **Integrações do demo:** Stripe/Connect em modo de teste com checkout hospedado, cartão e BRL; *separate charges and transfers* para transferir o valor ao saldo Connect após entrega; Ship24 sujeito à verificação de cobertura e plano gratuito; Ollama local para texto+imagem; armazenamento de imagens no filesystem local por interface substituível.
+- **Identidade:** login próprio da aplicação e login por Google coexistem e resolvem para a mesma conta interna. O Connect onboarding é obrigatório antes de publicar item para venda. Papéis e lojas pertencem ao Smart Atelier.
+- **Webhooks:** executar localmente e expor temporariamente endpoints via túnel HTTPS para receber eventos externos durante o desenvolvimento/demonstração. A solução permanente de hospedagem permanece em aberto.
+- **Segurança financeira:** entrega confirmada pelo Ship24 pode iniciar uma única transferência de teste ao saldo conectado, pelo valor integral do item. Eventos repetidos ou fora de ordem não antecipam nem duplicam o efeito; falhas temporárias do Stripe geram novas tentativas idempotentes. O banco do artesão recebe segundo o cronograma Connect.
+- **Ainda precisa ser detalhado na implementação:** schemas JSON e schema/migrações finais; segredos e validação de webhooks conforme os provedores; backoff, métricas/alertas e detalhes de autorização; cenários de falha de rastreio; hospedagem permanente. Verificar Correios no plano grátis Ship24 antes de iniciar essa integração.
+- **Critério de conclusão da tarefa:** arquitetura modular e limites do demo registrados, com operações, entidades, estados, consistência e testes planejados; refinar schemas/rotas em tarefas de implementação. Manter dependências externas/produção explicitamente pendentes. A aprovação não adiciona dependências ao bootstrap, não autoriza custos e não aprova arquitetura de produção.
 
 Para detalhar uma tarefa de implementação, use o modelo abaixo. Preencha somente o que estiver definido e mantenha o restante como pendência.
 
@@ -133,9 +169,7 @@ Para detalhar uma tarefa de implementação, use o modelo abaixo. Preencha somen
 
 ## Propostas em discussão — ainda não confirmadas
 
-- Quem cria uma loja continua podendo comprar usando a mesma conta.
 - Separar a visibilidade de um trabalho da sua disponibilidade para venda: registro privado, portfólio público sem venda e anúncio disponível para compra.
-- Oferecer compra direta para peças prontas, com preço e quantidade disponíveis cadastrados pelo vendedor.
 - Vincular cada conversa ao produto ou à encomenda correspondente.
 - Permitir ao vendedor enviar um orçamento estruturado no chat, com descrição da peça, personalizações, valor e prazo de produção.
 - Transformar o orçamento em pedido quando o comprador aceitar a proposta, preservando os termos combinados no histórico.
@@ -235,20 +269,22 @@ O repasse antes da entrega não aparece como causa declarada do encerramento nos
 
 ## Questões em aberto
 
-### Próxima etapa proposta: escolher a organização e definir a primeira entrega
+### Definições ainda necessárias antes de implementar as jornadas
 
-Escolher entre projeto integrador modular e coleção de projetos menores. Depois, definir a primeira entrega demonstrável e seus critérios de conclusão para aprendizado e portfólio. A ordem abaixo organiza a discussão; não confirma funcionalidades adicionais.
+T01, T02 e a arquitetura inicial de T08 estão definidas. Isso não conclui a especificação funcional nem autoriza a implementação de todas as fases. As pendências abaixo devem ser detalhadas nas tarefas correspondentes e no plano de entrega.
 
-| Grupo                          | Definições que faltam                                                                                                                                                                                                                                 |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Primeira versão e demonstração | Casos demonstrados, categorias usadas no catálogo de exemplo, site ou aplicativo, prioridades, prazo, recursos disponíveis e critérios para avaliar o aprendizado e a qualidade da entrega.                                                           |
-| Loja e catálogo                | Requisitos para criar loja, uma ou várias lojas por pessoa, continuidade do papel de comprador, visibilidade dos trabalhos, dados das peças e controle de estoque das peças prontas.                                                                  |
-| Descoberta e compra            | Como encontrar trabalhos e lojas, busca e filtros necessários, necessidade de favoritos e avaliações, compra direta e pedido de uma loja por vez ou carrinho com várias lojas. O carrinho afeta frete, divisão do pagamento e disputas.               |
-| Encomendas e chat              | Conteúdo e validade dos orçamentos, aceite, mudanças no combinado, prazos de produção, estados do pedido e recursos essenciais da conversa e das notificações.                                                                                        |
-| Entrega, pagamentos e receita  | Cotação e cobrança do frete, rastreamento, possibilidade de retirada, prova de entrega, prazo de repasse, regras de disputa, provedor de pagamentos e forma de cobrança da plataforma.                                                                |
-| Operação e dashboard           | Responsáveis pelo suporte e pela mediação, permissões administrativas internas, moderação, cancelamentos, indicadores e filtros do dashboard. Lucro do artesão exigiria registrar custos; receita e saldo a receber precisam ter definições próprias. |
+| Área | Pendências | Referência |
+| --- | --- | --- |
+| Conta e loja no produto completo | Quantidade de lojas por conta, regras completas de perfil e autorização, recuperação de conta e cenários de segurança. A demonstração cobre cadastro, login próprio/Google e criação de loja. | T03 |
+| Cadastro e publicação no produto completo | Estados de visibilidade, quantidade, edição e retirada de trabalhos; na demonstração, somente item pronto publicado e disponível para compra. | T03 |
+| Encomendas e chat | Conteúdo e validade dos orçamentos, aceite, alterações, prazos, estados, notificações e permissões. Fora da primeira demonstração. | T04 |
+| Pagamento em produção | Provedor e modelo de produção, disputas, estornos, prazos e obrigações legais. Stripe Connect fica restrito ao modo de teste neste recorte. | T05 |
+| Rastreamento | Validar com a lista atual da API/dashboard Ship24 se Correios está coberto e testar um rastreio de sandbox; se não estiver coberto ou exigir um plano pago, voltar à escolha do provedor. Definir como tratar rastreio não reconhecido. O vendedor informa transportadora e código. A cota aceita é 10/mês. | T02/T05 |
+| Dashboard e suporte | Indicadores, fontes, filtros, papéis administrativos, mediação e operação de suporte. | T06 |
+| Avaliação da IA | Baseline, casos de avaliação, qualidade esperada, latência, limites computacionais e tratamento de falha do Ollama. | T07 |
+| Especificação técnica e operação | Contratos API, schema/migrações, segredos, assinaturas, idempotência, retries, observabilidade, cobertura Ship24, hospedagem e túnel escolhido. Estratégia de testes definida; aplicação ainda precisa implementá-la. | T08 |
 
-Depois dessas definições, comparar abordagens de construção, propor a arquitetura e as integrações, e consolidar a especificação para revisão e aprovação. O registro de decisões não substitui essa especificação. Somente o bootstrap técnico foi criado; a implementação das funcionalidades não foi iniciada.
+Somente o bootstrap técnico foi criado. Os componentes aprovados para a arquitetura inicial ainda não foram adicionados ao código; implementação de produto não começou.
 
 ### Pendência: prazo e confirmação da entrega para repasse
 
@@ -257,6 +293,10 @@ Depois dessas definições, comparar abordagens de construção, propor a arquit
 - Esse prazo operacional de repasse não será tratado como prazo final para todos os direitos de reclamação, devolução ou reembolso.
 
 ## Histórico
+
+- **12/11/2026 — Fase 0 concluída no planejamento:** confirmação do projeto integrador modular (T01), da jornada de peça pronta até transferência após entrega (T02), da arquitetura modular com Axum/Tokio, PostgreSQL/SQLx, Redis, Stripe Connect de teste, Ship24 (10 rastreamentos/mês grátis; Correios como cobertura mínima a validar), Ollama local e túnel HTTPS temporário (T08), e da ordem de marcos do roadmap. Foram definidos checkout hospedado, cartão de teste/BRL, reserva de estoque, endereço, Connect onboarding, testes simulados/manual e exclusão de cancelamentos, reembolsos e disputas da demonstração. A implementação de produto não começou; validar cobertura dos Correios antes de integrar Ship24. Produção e custos externos seguem pendentes.
+- **12/11/2026 — Fase 1 concluída:** API inicial Axum/Tokio, conexões PostgreSQL/Redis e health checks, frontend consultando a API, configuração local, verificações automatizadas locais e workflow de CI implementados sem regras de negócio. Docker Compose e execução remota da CI seguem como verificações operacionais; infraestrutura de domínio e integrações externas continuam pendentes.
+- **12/11/2026 — Fase 0 concluída no planejamento:** confirmação do projeto integrador modular (T01), da jornada de peça pronta até transferência após entrega (T02), da arquitetura modular com Axum/Tokio, PostgreSQL/SQLx, Redis, Stripe Connect de teste, Ship24 (10 rastreamentos/mês grátis; Correios como cobertura mínima a validar), Ollama local e túnel HTTPS temporário (T08), e da ordem de marcos do roadmap. Foram definidos checkout hospedado, cartão de teste/BRL, reserva de estoque, endereço, Connect onboarding, testes simulados/manual e exclusão de cancelamentos, reembolsos e disputas da demonstração. Naquele momento, a implementação de produto não havia começado; validar cobertura dos Correios antes de integrar Ship24. Produção e custos externos seguem pendentes.
 
 - **11/11/2026 — Framework do frontend:** confirmação da adoção de SvelteKit 3. A decisão estabelece o framework de aplicação do frontend sem definir hospedagem, backend HTTP ou funcionalidades de produto.
 

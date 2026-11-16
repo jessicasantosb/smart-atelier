@@ -6,7 +6,7 @@
 - Toda pessoa começa como compradora; criar loja habilita a atuação como vendedora. A continuidade das compras e a quantidade de lojas por conta ainda precisam ser definidas.
 - Um trabalho pode existir sem estar à venda. Não confunda cadastro, visibilidade, estoque e disponibilidade; seus detalhes ainda estão em discussão.
 - Preserve pedidos internos, negociação de orçamento e chat humano. Assistência de IA é adicional e depende de escopo aprovado.
-- Não assuma que sete dias para repasse, sandbox, carrinho multiloja, compra direta ou recursos específicos de IA foram aprovados.
+- Preserve as decisões confirmadas em `docs/decisions.md`, incluindo a demonstração de teste definida em T02. Modelo de produção, disputas e decisões explicitamente pendentes continuam em aberto.
 
 ## Organização e contratos
 

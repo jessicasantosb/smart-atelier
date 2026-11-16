@@ -4,11 +4,13 @@ Smart Atelier is a craft marketplace project for learning and portfolio work. Th
 
 ## Project structure
 
-- `frontend/`: Svelte 5, TypeScript, SvelteKit 3, and Vite+ 1.5.1 application starter.
-- `backend/`: Rust 2024 binary starter with no dependencies, HTTP server, or routes.
-- `database/`: reserved; database, schema, and migrations are not defined.
-- `docs/decisions.md`: confirmed product decisions, proposals, and open tasks.
-- `docs/architecture.md`: current technical state and pending architecture choices.
+- `frontend/`: Svelte 5, TypeScript, SvelteKit 3, and Vite+ 1.5.1 application; homepage reports API liveness.
+- `backend/`: Rust 2024 API using Axum/Tokio, SQLx/PostgreSQL, and Redis; only health endpoints exist.
+- `database/`: reserved; PostgreSQL is approved, but domain schema and migrations are not defined.
+- `compose.yaml`: local PostgreSQL and Redis services for development.
+- `.github/workflows/ci.yml`: backend and frontend CI checks.
+- `docs/decisions.md`: confirmed product decisions, first-demo scope, proposals, and open tasks.
+- `docs/architecture.md`: current technical state and approved initial architecture for the demonstration.
 - `docs/rules/`: project, Rust, and Svelte development rules.
 - `docs/ia-study-plan.md`: technical learning coverage mapped to Rust and Svelte.
 
@@ -26,10 +28,19 @@ Read [AGENTS.md](AGENTS.md) and the relevant [development rules](docs/rules/READ
 | Frontend toolchain | [Vite+](https://viteplus.dev/) 1.5.1 | Vite/Rolldown, Oxlint, Oxfmt, and Vitest; configured from `frontend/vite.config.ts`. |
 | Frontend Svelte checks | `svelte-check`, TypeScript | Validates Svelte components and TypeScript; included in `bun run check`. |
 | Frontend tests | Vitest 5.1.0, Svelte Testing Library, jsdom | Unit and component testing; a Counter interaction test demonstrates the setup. |
-| Backend | Rust 2024 | Minimal binary starter. |
+| Backend | Rust 2024, Axum, Tokio | HTTP API bootstrap with `/health/live` and `/health/ready`; no marketplace features. |
 | Security scanning | Not configured | Semgrep is a candidate for SAST across Rust and TypeScript; `cargo-audit` is a candidate for Rust dependency advisory checks. Neither is installed or configured. |
+| Demo HTTP API | Axum + Tokio | Implemented API foundation and health endpoints; marketplace routes remain pending. |
+| Demo persistence | PostgreSQL + SQLx | Connection pool and readiness check implemented; PostgreSQL remains authoritative for domain state. Schema and migrations are pending. |
+| Demo background work | Redis | Connection and readiness check implemented. Queue and retry scheduling remain pending; Redis does not replace PostgreSQL. |
+| Demo authentication | Application-owned accounts + Google (planned) | Both login methods resolve to one internal Smart Atelier account; roles and shops remain app-owned. |
+| Demo payments | Stripe Checkout + Stripe Connect (test mode) | Hosted card checkout in BRL; after delivery, separate charges and transfers move 100% of the item amount to the artisan's Connect balance. Bank payout follows the account schedule. Production payment model remains open. |
+| Demo shipping tracking | Ship24 (free API/webhook tier) | Up to 10 shipments per month with no overage; tracking stops at the cap. Correios is the minimum carrier to validate before integration. |
+| Demo AI | Ollama (local) | Approved local multimodal model runtime behind a replaceable provider interface; not integrated yet. Seller approval is required before publishing generated text. |
+| Demo media storage | Local filesystem (planned) | Stored outside PostgreSQL behind a replaceable storage interface. |
+| Demo webhooks | Temporary HTTPS tunnel (planned) | Exposes local webhook endpoints during development/demonstration; permanent hosting remains undecided. |
 
-The HTTP framework, async runtime, database, authentication provider, hosting, payment provider, and AI services remain undecided. Do not treat listed frontend dependencies as completed product capabilities.
+Choices marked planned describe the first demonstration architecture and are not implemented product capabilities. Production hosting and payment rules remain undecided.
 
 ## Setup
 
@@ -43,8 +54,23 @@ To run frontend commands through mise, from the repository root:
 
 ```sh
 mise exec -- bun --cwd frontend install --frozen-lockfile
-mise exec -- bun --cwd frontend run dev
 ```
+
+Start local PostgreSQL and Redis from the repository root (Docker Compose required):
+
+```sh
+docker compose up -d
+```
+
+In PowerShell, create the backend environment file and start the API:
+
+```powershell
+Copy-Item backend/.env.example backend/.env
+Set-Location backend
+mise exec -- cargo run
+```
+
+In another terminal, start the frontend from `frontend/` with `mise exec -- bun run dev`. Set `VITE_API_BASE_URL` in `frontend/.env` only if the API is running at a different address. `backend/.env` is ignored by Git.
 
 Alternatively, change into `frontend/` and run `mise exec -- bun install --frozen-lockfile` followed by `mise exec -- bun run dev`.
 
@@ -76,7 +102,7 @@ mise exec -- cargo test --locked
 mise exec -- cargo clippy --all-targets --locked -- -D warnings
 ```
 
-Cargo should generate the initial `Cargo.lock` when `mise exec -- cargo check` runs; commit that lockfile for the application. Backend compilation and execution have not yet been verified with the project-pinned toolchain.
+The committed `backend/Cargo.lock` pins application dependencies. The API requires `DATABASE_URL` and `REDIS_URL`; copy `backend/.env.example` to `backend/.env` for local execution. `/health/live` checks process availability, while `/health/ready` checks PostgreSQL and Redis.
 
 ## Product and learning plans
 

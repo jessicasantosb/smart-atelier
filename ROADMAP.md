@@ -32,19 +32,50 @@ Este roadmap descreve as fases de evolução do Smart Atelier, da definição do
 | 16. Qualidade ponta a ponta | Jornadas, contratos, falhas e permissões validados. | Fases funcionais selecionadas. |
 | 17. Implantação e demonstração | Aplicação demonstrável, documentação técnica e resultados reproduzíveis. | Fases anteriores e T08. |
 
+## Primeira demonstração integrada
+
+A primeira demonstração exercita um único caminho completo: artesão cria conta e loja, conclui o onboarding de teste do Stripe Connect, cadastra uma peça pronta com fotos e atributos fornecidos, recebe um rascunho de título e descrição gerado localmente por IA e revisa/aprova o texto; publica a loja ou produto e abre sua página pública diretamente; comprador cria/acessa uma conta, informa endereço de entrega no Smart Atelier e compra um único item; o estoque fica reservado por 30 minutos durante checkout hospedado pelo Stripe; após pagamento confirmado por webhook, o artesão registra transportadora e código para acompanhamento pelo Ship24; quando o Ship24 informa “entregue”, o backend inicia uma transferência de teste pelo Stripe Connect.
+
+O cadastro não permite que a IA invente preço, materiais, medidas ou estoque. A quantidade inicial de peça única é 1. Checkout aceita apenas cartão de teste em BRL; a sessão expira em 30 minutos. Recusa de uma tentativa permite usar outro cartão e mantém a reserva; apenas a expiração final sem pagamento libera o estoque. O endereço é coletado no Smart Atelier antes do checkout, excluído se a compra expirar e mantido em pedido pago para envio. O backend confirma o pagamento por webhook, não pelo retorno do navegador. Em modo de teste, separate charges and transfers envia 100% do valor do item ao saldo Connect do artesão, sem comissão demo; o repasse bancário segue o cronograma configurado no Connect. Não fazem parte desta demonstração encomendas, chat, busca de catálogo, carrinho com vários itens/lojas, cálculo de frete, etiqueta de envio, pagamentos reais ou operação comercial. O Ship24 foi aprovado no plano grátis de 10 rastreamentos por mês, sem excedente; Correios é a cobertura mínima a validar antes da integração. O primeiro ambiente será local, com webhooks recebidos por túnel HTTPS temporário. A arquitetura usa SvelteKit no frontend, API Rust com Axum/Tokio, PostgreSQL/SQLx, Redis para fila/retries, Ollama local e filesystem local para imagens. Redis agenda trabalho; o estado de negócio e a proteção contra efeitos duplicados permanecem no PostgreSQL e nos mecanismos idempotentes do provedor.
+
+Esse recorte demonstra uma jornada integrada; as fases seguintes continuam expandindo a aplicação completa. Laboratórios e teoria permanecem separados quando os tópicos não pertencem naturalmente ao marketplace.
+
+## Prioridade aprovada de entrega
+
+Sequência por dependências, sem datas ou estimativas aprovadas. O primeiro objetivo é demonstrar uma jornada vertical completa; depois, expandir o marketplace e aprofundar as capacidades de IA. Segurança, acessibilidade, qualidade e observabilidade atravessam todas as entregas.
+
+| Marco | Resultado | Fases relacionadas | Dependências e limites |
+| --- | --- | --- | --- |
+| 1. Base de desenvolvimento | API Rust inicial, PostgreSQL, Redis, ambiente local e verificações automatizadas. | 1; partes de 14–16. | Contratos e configuração definidos; não criar infraestrutura sem uso aprovado. |
+| 2. Artesão e publicação assistida | Conta, loja, Connect onboarding de teste, cadastro de peça/imagens, rascunho Ollama revisado e página pública. | 2–4 e parte de 8. | Conta/loja e regras da primeira demonstração; storage local. |
+| 3. Compra e pagamento de teste | Conta do comprador, endereço, reserva de estoque, Checkout hospedado em BRL e confirmação por webhook. | Parte de 3–6. | Checkout de cartão; 30 min de reserva; sem carrinho ou frete calculado. |
+| 4. Entrega e transferência | Registro de transportadora/código, tracking no app e Ship24, evento de entrega e transferência Connect de teste. | Parte de 6 e 16–17. | Correios validado no Ship24; máximo 10 rastreamentos mensais gratuitos; sem transferências reais. |
+| 5. Marketplace completo | Descoberta, encomendas/orçamentos, chat, acompanhamento completo, dashboard e suporte. | 3–7. | Requer fechar T03–T06; funcionalidades não incluídas na primeira demonstração não são automaticamente aprovadas para implementação. |
+| 6. IA aplicada ampliada e cobertura de aprendizado | Avaliar RAG, MCP, agentes e demais tópicos; integrar ao produto somente capacidades aprovadas, mantendo laboratórios e teoria independentes. | 8–15 e matriz de cobertura. | Usar dados autorizados, baseline, limites e avaliação; custos externos exigem autorização própria. |
+
+Esta ordem foi aprovada em 12/11/2026. Os marcos não têm datas nem estimativas. A aprovação do roadmap não autoriza automaticamente a implementação das funcionalidades.
+
 ## Fases detalhadas
 
 ### Fase 0 — Escopo, arquitetura e plano de entrega
 
-Decidir se o marketplace será o projeto integrador ou se haverá estudos modulares; definir público, proposta de valor, primeira versão, marcos, backlog, stack, riscos e critérios. Usar IA para apoiar requisitos, decomposição e priorização, com revisão humana.
+**Estado: concluída no planejamento em 12/11/2026.** T01, T02 e T08 foram definidos; a arquitetura inicial e os marcos de entrega foram aprovados. Nenhuma funcionalidade de produto foi implementada nesta fase. Validar cobertura dos Correios no plano gratuito Ship24 antes de integrar o rastreamento na fase de implementação.
+
+Tratar o marketplace completo como projeto integrador modular; reservar laboratórios e teoria para tópicos que não se encaixam no produto. Definir público, proposta de valor, primeira demonstração, marcos, backlog, stack, riscos e critérios. Usar IA para apoiar requisitos, decomposição e priorização, com revisão humana.
 
 **Tópicos relacionados:** definição de escopo e proposta de valor; requisitos, histórias e critérios de aceite; decomposição, priorização, cronograma e capacidade; escolha entre IA e regras determinísticas; arquitetura modular e plano do projeto integrador.
 
-**Saída:** escopo aprovado, decisões registradas, dependências e arquitetura inicial documentadas.
+**Saída:** escopo aprovado, decisões registradas, dependências, arquitetura inicial e prioridades documentadas.
 
 ### Fase 1 — Base técnica e fluxo de desenvolvimento
 
-Manter o monorepo com Svelte 5, TypeScript, Vite e Rust. Definir contratos, módulos por funcionalidade, ambientes, CI e padrões de documentação. Usar ferramentas de desenvolvimento assistidas somente com revisão de mudanças e verificações.
+**Estado: concluída em 12/11/2026.** A base técnica foi implementada e as verificações locais de Rust e frontend passaram. A configuração de CI e os serviços locais estão documentados. A inicialização de PostgreSQL/Redis via Compose e a execução remota do GitHub Actions não foram verificadas neste ambiente; ficam como verificações operacionais, sem bloquear a conclusão da fase.
+
+**Concluído:** API HTTP inicial; configuração local documentada; checagens de qualidade e build automatizadas em GitHub Actions; comunicação frontend/backend para health; lockfile Rust versionado; regras e instruções atualizadas.
+
+**Próximas verificações:** iniciar os serviços com Docker Compose e confirmar `/health/ready`; observar uma execução da CI no GitHub. Os contratos de API, schema e migrações serão definidos junto a cada funcionalidade aprovada, antes de sua implementação.
+
+Manter o monorepo com Svelte 5, TypeScript, SvelteKit, Vite+ e Rust. Para a demonstração, estabelecer a API com Axum/Tokio, PostgreSQL/SQLx e Redis. Definir contratos, módulos por funcionalidade, ambientes, CI e padrões de documentação. Usar ferramentas de desenvolvimento assistidas somente com revisão de mudanças e verificações.
 
 **Tópicos relacionados:** engenharia de prompts para desenvolvimento; ferramentas de programação assistida; agentes de código; scaffolding e refatoração; automação de qualidade e pipelines de integração contínua.
 
@@ -60,7 +91,7 @@ Pesquisar jornadas de comprador e vendedor, criar wireframes e protótipos, aval
 
 ### Fase 3 — Contas, autenticação e lojas
 
-Definir cadastro, sessão, papéis, criação de loja, permissões e isolamento dos dados. Validar autorização no backend Rust para cada operação, sem depender de controles da interface.
+Implementar cadastro e sessão com login próprio e Google, criação de loja, papéis, permissões e isolamento dos dados. A conta autenticada será a conta interna do Smart Atelier, que controla papéis e lojas. Incluir onboarding Stripe Connect de teste antes de habilitar a publicação à venda. Validar autorização no backend Rust para cada operação, sem depender de controles da interface.
 
 **Tópicos relacionados:** autenticação para ferramentas e MCP; tokens de serviço e controle de acesso; governança, responsabilidade, riscos, privacidade e segurança dos dados.
 
@@ -68,7 +99,7 @@ Definir cadastro, sessão, papéis, criação de loja, permissões e isolamento 
 
 ### Fase 4 — Catálogo e descoberta
 
-Implementar cadastro de trabalhos, imagens, visibilidade e disponibilidade conforme as decisões aprovadas. Criar busca e filtros. Avaliar busca semântica em laboratório antes de selecioná-la para o produto.
+Implementar cadastro de peças prontas, imagens, atributos, visibilidade e disponibilidade conforme as decisões aprovadas. Para a primeira demonstração, abrir diretamente a página pública da loja ou do produto e oferecer compra de um item por pedido, sem catálogo de busca. Criar busca e filtros nas etapas posteriores; avaliar busca semântica em laboratório antes de selecioná-la para o produto.
 
 **Tópicos relacionados:** embeddings e busca por similaridade; busca híbrida e múltiplos índices; personalização e busca semântica na interface.
 
@@ -84,7 +115,7 @@ Definir estados e histórico; construir solicitação e negociação de orçamen
 
 ### Fase 6 — Pagamento, entrega e repasse
 
-Escolher provedor após análise. Implementar cobrança integral após aceite e antes da produção, confirmação autenticada, entrega, disputas e repasse posterior. Tratar eventos duplicados, fora de ordem e falhas sem repetir efeitos financeiros.
+Na demonstração, usar Stripe Checkout hospedado, somente cartão de teste em BRL, e Stripe Connect com separate charges and transfers. A reserva de estoque dura 30 minutos; pagamento confirmado é reconhecido por webhook e checkout expirado sem pagamento libera a unidade. Recusa de cartão por tentativa mantém a sessão ativa e permite nova tentativa. Após envio informado pelo artesão, acompanhar transportadora e código no Ship24. Somente a confirmação de entrega pelo Ship24 inicia automaticamente uma transferência de 100% do valor do item ao saldo Connect; o envio à conta bancária segue o cronograma Connect. Validar a cobertura necessária e os limites gratuitos antes de depender do Ship24. Tratar webhooks duplicados, fora de ordem e falhas usando PostgreSQL para estado/idempotência e Redis para fila e retries. Pagamentos de produção, disputas e prazos operacionais continuam dependendo de decisão própria.
 
 **Tópicos relacionados:** APIs autenticadas no servidor; permissões e segurança MCP; comandos com aprovação humana, auditoria e proteção de dados.
 
@@ -100,7 +131,7 @@ Definir indicadores, fontes e permissões; construir acompanhamento de vendas e 
 
 ### Fase 8 — IA generativa e multimodal
 
-Avaliar rascunhos de anúncios e assistência a encomendas com texto, imagem, áudio, vídeo ou OCR. Manter credenciais no servidor. Pedir confirmação para atributos incertos e medir qualidade, custo e latência.
+Na primeira demonstração, usar Ollama local para rascunhar título e descrição a partir dos dados informados e fotos do produto. O artesão revisa e aprova antes da publicação; a IA não preenche preço, materiais, medidas ou quantidade. Manter credenciais no servidor para provedores futuros e medir qualidade, latência e uso de recursos. Outros modelos, áudio, vídeo e OCR ficam em avaliação ou laboratórios até aprovação específica.
 
 **Tópicos relacionados:** provedores de modelos e engenharia de prompts; encadeamento, custo e cache; análise de texto, imagem, áudio e vídeo; OCR; bots multimodais; roteamento entre modelos e streaming.
 
@@ -156,7 +187,7 @@ Tratar modelagem de ameaças, isolamento entre lojas, prompt injection, segredos
 
 ### Fase 15 — Infraestrutura, observabilidade e resiliência
 
-Em ambiente de teste, estudar IaC, pipelines, containers, Kubernetes/GitOps, métricas, logs, traces, diagnóstico, FinOps e remediação com dry-run e aprovação. Dimensionar a infraestrutura a partir de necessidades verificadas.
+Para a demonstração, executar localmente e expor webhooks por túnel HTTPS temporário; Redis processa filas e retries junto ao backend Rust. Em ambiente de teste, estudar IaC, pipelines, containers, Kubernetes/GitOps, métricas, logs, traces, diagnóstico, FinOps e remediação com dry-run e aprovação. Dimensionar a infraestrutura a partir de necessidades verificadas.
 
 **Tópicos relacionados:** observabilidade e retries para IA; infraestrutura como código; políticas e detecção de drift; Kubernetes, autoscaling, GitOps e estratégias de deploy; troubleshooting; métricas, logs, traces, alertas e anomalias; ChatOps; scanners e segurança de containers; CI/CD; FinOps; RAG de runbooks e autorremediação com dry-run e aprovação.
 
@@ -164,7 +195,7 @@ Em ambiente de teste, estudar IaC, pipelines, containers, Kubernetes/GitOps, mé
 
 ### Fase 16 — Qualidade ponta a ponta
 
-Validar regras, contratos, permissões, eventos duplicados/fora de ordem, jornadas de compra e encomenda, falhas de IA e acessibilidade. Usar automação E2E com resultados revisáveis.
+Validar regras, contratos, permissões, eventos duplicados/fora de ordem, jornadas de compra e encomenda, falhas de IA e acessibilidade. Automatizar em CI com dependências externas simuladas; usar roteiro manual de sandbox para validar Stripe, Connect e Ship24 reais, respeitando as credenciais e quotas de teste.
 
 **Tópicos relacionados:** geração e revisão de testes; contratos backend/frontend; automação E2E com agentes e MCP; pipelines e gates de qualidade; auditoria documental; segurança, autorização e testes de falha.
 

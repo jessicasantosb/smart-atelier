@@ -1,18 +1,65 @@
-# Arquitetura — estado inicial
+# Arquitetura — estado inicial e decisões para a demonstração
 
-Atualizado em 11/11/2026. Este documento descreve o estado técnico atual, sem aprovar uma arquitetura completa de produto.
+Atualizado em 12/11/2026. Registra o estado técnico atual e a arquitetura inicial aprovada para a demonstração; não define a arquitetura de produção.
 
 | Área | Estado |
 | --- | --- |
-| Frontend | Svelte 5, TypeScript, SvelteKit 3 e Vite+ 1.5.1 (Vite 8/Rolldown). A rota inicial ainda exibe a tela de demonstração do template; não há fluxos do marketplace nem integração com backend. O layout, roteamento, renderização e build usam SvelteKit. `adapter-auto` está configurado provisoriamente enquanto a hospedagem não é escolhida. Bun 1.4.4 é fixado em `mise.toml`, dependências em `frontend/bun.lock`. Oxlint e Oxfmt fazem lint e formatação, incluindo `.svelte`; `svelte-check` e TypeScript verificam os componentes. Testes usam Vitest 5.1, Svelte Testing Library e jsdom. |
-| Backend | Binário Rust independente, edição 2024, sem dependências. A versão Rust 1.99.1, Cargo, rustfmt e Clippy são declarados em `mise.toml`. `src/main.rs` imprime Hello, world!. Estrutura equivalente ao init, criada manualmente por ausência de Cargo no bootstrap; as verificações do backend ainda precisam ser executadas. |
-| Persistência | Diretório reservado, sem banco, schema ou migrações. |
-| Comunicação | Ainda não há servidor HTTP, contratos implementados ou chamadas entre frontend e backend. |
+| Frontend | Svelte 5, TypeScript, SvelteKit 3 e Vite+ 1.5.1 (Vite 8/Rolldown). A tela inicial verifica a liveness da API Rust; ainda não há fluxos do marketplace. O `adapter-auto` permanece provisório enquanto a hospedagem não é escolhida. Bun 1.4.4 é fixado em `mise.toml`, dependências em `frontend/bun.lock`. Oxlint/Oxfmt fazem lint e formatação; `svelte-check` e TypeScript verificam os componentes; testes usam Vitest 5.1, Svelte Testing Library e jsdom. |
+| Backend atual | Binário Rust edição 2024 com Axum/Tokio, SQLx/PostgreSQL, Redis, tracing e CORS. `GET /health/live` reporta processo ativo; `GET /health/ready` valida PostgreSQL e Redis. A inicialização exige conexões disponíveis. Nenhum fluxo do marketplace está implementado. |
+| Serviços locais | `compose.yaml` oferece PostgreSQL 17 e Redis 7 com healthchecks e volume local. Docker Compose é necessário e não está instalado neste ambiente. |
+| CI | GitHub Actions executa formatação, compilação, testes e Clippy no Rust, além de check, lint, formatação, testes e build no frontend. |
+| Forma de arquitetura aprovada | Monólito modular; SvelteKit chama API Rust HTTP/JSON; Rust mantém regras e dados autoritativos; sem microserviços na primeira demonstração. |
+| Persistência aprovada para a demonstração | PostgreSQL + SQLx. Será a fonte de verdade dos dados e estados de negócio; pool e verificação de prontidão implementados, sem schema ou migrações de domínio. |
+| Tarefas assíncronas | Redis será usado como fila de processamento e retries. Conexão e verificação de prontidão implementadas; fila ainda não configurada. |
+| Identidade | Login próprio e Google coexistem para a mesma conta interna. O comprador autentica antes do checkout; o artesão conclui onboarding Stripe Connect em teste antes de publicar à venda. Fluxos ainda não implementados. |
+| Pagamentos e entrega | Checkout hospedado pelo Stripe, cartão de teste e BRL. Endereço coletado no Smart Atelier, apagado se o pedido não for pago e mantido para pedidos pagos. Reserva de estoque de 30 minutos; recusa de uma tentativa não libera a quantidade, apenas expiração final sem pagamento. Ship24 aprovado no plano grátis de 10 rastreamentos/mês; Correios é a cobertura mínima a validar antes da integração. Webhooks ainda não implementados. |
+| Repasse de teste | *Separate charges and transfers*: após evento Ship24 `delivered`, transferir 100% do valor do item ao saldo Connect, sem comissão demo. O repasse bancário segue o cronograma do Connect. Produção ainda requer análise e decisão. |
+| IA e imagens | Ollama local será o primeiro provedor de IA multimodal, acessado por interface substituível no Rust. Imagens serão guardadas no filesystem local por uma interface de armazenamento. Nenhum dos dois está implementado. |
+| Comunicação e webhooks | SvelteKit chamará a API Rust por HTTP/JSON. Desenvolvimento e demonstração receberão webhooks externos por endpoints locais expostos temporariamente via túnel HTTPS. Túnel, contratos e validação de assinaturas ainda não definidos. |
 
 ## Organização futura
 
-As regras em [docs/rules](rules/README.md) orientam a evolução por funcionalidade. Casos de uso, repositórios, adaptadores e transações serão introduzidos quando houver comportamento aprovado que os justifique; o init não cria camadas vazias.
+As regras em [docs/rules](rules/README.md) orientam a evolução por funcionalidade. Casos de uso, repositórios, adaptadores e transações serão introduzidos quando houver comportamento aprovado que os justifique; a base técnica não cria camadas vazias.
 
-Framework HTTP e runtime assíncrono do backend, banco, autenticação, hospedagem, pagamentos e ferramentas de IA continuam pendentes. SvelteKit foi escolhido para o frontend (D17); sua inclusão não define o framework HTTP do Rust nem duplica regras de negócio no frontend. O bootstrap não escolhe entre projeto integrador e coleção de estudos nem conclui as tarefas T01–T08 de [decisions.md](decisions.md).
+SvelteKit foi escolhido para o frontend (D17); a arquitetura mantém regras de negócio e dados autoritativos no Rust. Para a demonstração, Axum/Tokio, PostgreSQL/SQLx e Redis foram escolhidos, assim como Stripe Connect em teste, Ship24, Ollama local, armazenamento local e túnel HTTPS temporário. Os principais estados do pedido, a reserva de estoque e a estratégia de testes foram definidos em T02. A base técnica foi inicializada; domínio, schema, segurança de webhooks, fila, observabilidade, validação Correios no Ship24 e hospedagem continuam pendentes conforme T08 em [decisions.md](decisions.md). A implementação não define arquitetura de produção.
 
-Consulte o [README](../README.md) para requisitos e comandos locais. A configuração é independente por diretório; não há workspace Cargo na raiz.
+## Proposta de especificação técnica para a demonstração
+
+Os contratos e nomes abaixo são uma base de planejamento para revisão; apenas as rotas de health estão implementadas. O backend Rust validará autorização, executará regras e será a fonte autoritativa; SvelteKit apresenta páginas e chama a API. Integrações externas e segredos permanecem no servidor.
+
+### Limites de API por funcionalidade
+
+| Funcionalidade | Operações candidatas |
+| --- | --- |
+| Identidade | Registrar conta, criar sessão própria, iniciar/retornar do login Google e consultar a sessão atual. |
+| Lojas | Criar loja, consultar página pública por slug e criar link de onboarding Connect de teste. |
+| Produtos | Criar/editar rascunho, enviar imagens para armazenamento, solicitar rascunho de texto à IA, aprovar/publicar e consultar página pública por slug. |
+| Checkout e pedidos | Criar pedido de um único item com endereço de entrega, reservar estoque, criar Checkout Session hospedada e consultar estado do pedido pelo comprador/vendedor autorizado. |
+| Envio e rastreamento | Registrar transportadora e código no pedido pago; receber eventos Ship24; consultar eventos normalizados no pedido. |
+| Webhooks | Endpoints dedicados para eventos Stripe e Ship24, com validação de assinatura/segredo antes de persistir ou enfileirar qualquer efeito. |
+
+Os caminhos HTTP exatos, schemas JSON, paginação, códigos de erro e versionamento (`/api/v1`) devem ser definidos no desenho de contratos antes de implementar cada funcionalidade.
+
+### Dados e consistência
+
+Agregados/entidades previstos: conta e identidade externa; loja; produto e metadados de mídia; reserva de estoque; pedido/linha única; endereço de entrega do pedido; sessão e evento de pagamento; conta conectada; envio/rastreamento; evento de provedor; transferência Connect. Imagens ficam fora do PostgreSQL. Endereço não pago é removido ao confirmar expiração do Checkout; endereço de pedido pago permanece no pedido enquanto necessário para envio e acompanhamento. Política de retenção posterior e requisitos de produção continuam pendentes.
+
+Ao iniciar checkout, uma transação PostgreSQL valida disponibilidade e cria reserva de 30 minutos e pedido pendente. O backend solicita a Checkout Session ao Stripe e grava sua referência/expiração. Uma tentativa de cartão recusada mantém reserva enquanto a sessão seguir aberta. Webhook autenticado de pagamento bem-sucedido muda o pedido para pago; webhook autenticado de expiração sem pagamento encerra a tentativa, apaga o endereço não pago e libera a reserva. O retorno do navegador nunca autoriza o pedido.
+
+Estados de referência aprovados para a jornada: `awaiting_payment` → `paid` → `shipped` → `delivered` → `transfer_pending` → `transferred`. Expiração da Checkout Session sem pagamento encerra `awaiting_payment` e libera estoque. Exceções de rastreamento não causam repasse. Somente evento Ship24 autenticado e atual que represente entrega pode agendar a transferência. Eventos repetidos/fora de ordem não duplicam efeitos; chave idempotente por pedido protege a transferência Stripe.
+
+Ao receber webhook, o backend valida origem, registra evento único e estado no PostgreSQL e usa Redis para executar processamento assíncrono e retries. Uma varredura de eventos pendentes permite recuperar trabalho se Redis estiver indisponível. O processador consulta o estado atual antes de agir e persiste resultado/falha. Detalhes de assinatura Ship24/Stripe, identificadores de deduplicação, política de retries, backoff e alertas serão definidos usando os contratos reais dos provedores.
+
+### Validação da entrega
+
+- Testes Rust unitários para transições de estado, reserva/liberação do estoque, autorização e idempotência.
+- Testes Rust de integração com PostgreSQL e Redis locais, sem chamadas externas.
+- Testes frontend Vitest para formulários, estados de pedido, falhas e exibição de rastreamento.
+- Testes de contrato/webhook com payloads gravados e credenciais fictícias; nenhum teste da CI consome cota Ship24 ou cria cobrança fora de sandbox.
+- Roteiro manual de demonstração com Checkout/Connect em modo de teste, webhook Stripe encaminhado pelo túnel, tracker Ship24 de teste e evento entregue; registrar evidência do estado no app e no dashboard do provedor.
+
+### Pré-condições externas e limites
+
+Antes da integração Ship24, confirmar na lista autenticada de transportadoras que Correios está coberto no plano gratuito. Limitar o roteiro manual a 10 rastreamentos por mês; o plano gratuito não cobra excedente, mas interrompe rastreamento após esgotar a cota. Checkout/Connect e Ship24 ficam em sandbox/teste na demonstração. Hospedagem permanente, credenciais de produção, comissões, disputas e retenção de dados em produção ficam fora desta decisão.
+
+Consulte o [README](../README.md) para requisitos e comandos locais. A configuração é independente por diretório; não há workspace Cargo na raiz. Use `.env.example` para as variáveis da API e `VITE_API_BASE_URL` para o frontend.

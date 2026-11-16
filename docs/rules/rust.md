@@ -1,6 +1,6 @@
 # Rust — backend
 
-Backend inicializado como binário Rust edição 2024 (requer Rust 1.85+), sem dependências. Runtime, framework e crates permanecem por definir; estas regras não instalam dependências. A estrutura foi criada manualmente por ausência de Cargo no ambiente de bootstrap; gere e versione Cargo.lock ao validar com uma toolchain Rust. Siga o [AGENTS.md](../../AGENTS.md): código, identificadores, comentários, testes e exemplos de configuração devem estar em inglês.
+Backend Rust edição 2024 com Axum/Tokio para HTTP, SQLx para PostgreSQL, Redis assíncrono e tracing. Use `mise.toml` para a versão da toolchain. PostgreSQL e Redis são obrigatórios para iniciar a API; `/health/live` verifica apenas o processo e `/health/ready` verifica ambos os serviços. `.env.example` documenta a configuração local. Ainda não há schema ou migrações de domínio. Siga o [AGENTS.md](../../AGENTS.md): código, identificadores, comentários, testes e exemplos de configuração devem estar em inglês.
 
 ## Tipos e ownership
 

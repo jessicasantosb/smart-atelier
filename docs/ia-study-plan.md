@@ -6,7 +6,7 @@ Atualização: 10/11/2026.
 
 Roadmap técnico organizado em 11 áreas de aprendizado e experimentação. A demonstração, documentação e avaliação técnica do projeto integrador fazem parte das entregas. Atividades de carreira não fazem parte do escopo.
 
-Cada linha agrupa tópicos relacionados, explicitados na coluna Tópicos. IDs MC são estáveis e independentes dos IDs D e T de [docs/decisions.md](docs/decisions.md). Uma evidência pode atender várias linhas se comprovar os critérios de cada uma.
+Cada linha agrupa tópicos relacionados, explicitados na coluna Tópicos. IDs MC são estáveis e independentes dos IDs D e T de [decisions.md](decisions.md). Uma evidência pode atender várias linhas se comprovar os critérios de cada uma.
 
 - **Projeto:** aplicação no marketplace ou no processo interno de desenvolvimento/operação. Capacidades indicadas como candidatas dependem do recorte da entrega antes da implementação.
 - **Exercício:** laboratório separado; não vira funcionalidade obrigatória do marketplace.
