@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [
+          "frontend/src/app.css"
+        ],
+        "createdAt": "2026-11-25T11:17:31.236Z",
+        "reason": "Project UX direction approved by user specifies Inter Variable in docs/phase-2-ux-design.md"
+      }
+    ]
+  }
+}
