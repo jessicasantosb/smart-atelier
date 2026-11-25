@@ -1,238 +1,354 @@
 # Fases para a construção completa do Smart Atelier
 
-Este roadmap descreve as fases de evolução do Smart Atelier, da definição do escopo à implantação e demonstração. Decisões ainda propostas em [docs/decisions.md](docs/decisions.md) precisam ser confirmadas antes de virarem funcionalidades. Atividades de carreira ficam fora do plano.
+Atualizado em 16/11/2026.
 
-## Como usar
+O Smart Atelier é um projeto integrador modular para construir um marketplace de artesanato e estudar engenharia de software com IA aplicada. A construção da aplicação, os laboratórios independentes e o estudo teórico avançam em trilhas coordenadas. Atividades de carreira e entrevistas ficam fora do plano.
 
-- Divida cada fase em tarefas com objetivo, dependências, critérios de aceite, validação e evidência reproduzível.
-- Fases de ML, agentes, gestão e DevOps podem ocorrer em laboratórios separados. Um exercício não se torna requisito do marketplace automaticamente.
-- A ordem é indicativa. Use as dependências e decisões registradas para priorizar.
-- Marque uma fase como concluída somente após registrar resultados e evidências correspondentes.
+Este arquivo organiza a sequência, as dependências e os critérios das entregas. O [registro de decisões da aplicação](docs/decisions.md) define o comportamento aprovado e suas pendências; a [arquitetura](docs/architecture.md) descreve componentes e limites; o [plano de estudo e matriz de cobertura](docs/ia-study-plan.md) detalha todos os tópicos, tarefas e evidências de aprendizado.
 
-## Visão geral
+## Como acompanhar o trabalho
 
-| Fase | Resultado esperado | Dependências |
-| --- | --- | --- |
-| 0. Escopo e arquitetura | Recorte de produto, roadmap priorizado e arquitetura inicial aprovados. | T01, T02 e T08. |
-| 1. Base técnica | Ambiente Svelte/Rust, integração contínua e padrões de qualidade prontos. | Fase 0. |
-| 2. UX e protótipos | Jornadas e interface acessível validadas. | Fase 0. |
-| 3. Contas e lojas | Usuários autenticados e papéis/permissões definidos. | Fases 1–2; T03. |
-| 4. Catálogo e descoberta | Artesãos cadastram trabalhos e compradores os encontram. | Fase 3; T03. |
-| 5. Encomendas e pedidos | Orçamentos, chat e acompanhamento funcionam. | Fases 3–4; T04. |
-| 6. Pagamento e entrega | Cobrança e repasse seguem regras definidas e integração validada. | Fase 5; T05. |
-| 7. Dashboard e suporte | Vendedor acompanha indicadores e operação atende usuários. | Fases 5–6; T06. |
-| 8. IA generativa e multimodal | Capacidades selecionadas são testadas e, se aprovadas, integradas. | T07; controles de segurança. |
-| 9. Busca semântica e RAG | Busca ou assistência recupera informação com fontes verificáveis. | Corpus autorizado e baseline. |
-| 10. MCP | Ferramentas autorizadas podem ser descobertas e chamadas por clientes. | Contratos estáveis e segurança. |
-| 11. Agentes | Agente de escopo limitado executa fluxo com aprovação e auditoria. | Fases 8–10. |
-| 12. Laboratórios de ML | Treino/inferência no browser, vídeo e jogo avaliados. | Exercícios isolados. |
-| 13. Fine-tuning | Dataset autorizado e modelos ajustados avaliados. | Dados, baseline, orçamento aprovado. |
-| 14. Segurança e governança | Riscos, privacidade, limites e auditoria tratados. | Transversal; iniciar desde a fase 0. |
-| 15. Infraestrutura e operação | Build, deploy, observabilidade, resiliência e custos mensuráveis. | Arquitetura e ambiente de teste definidos. |
-| 16. Qualidade ponta a ponta | Jornadas, contratos, falhas e permissões validados. | Fases funcionais selecionadas. |
-| 17. Implantação e demonstração | Aplicação demonstrável, documentação técnica e resultados reproduzíveis. | Fases anteriores e T08. |
+- **Aplicação no projeto:** desenvolvimento do marketplace ou de seu processo interno de engenharia, conforme o escopo aprovado.
+- **Exercício separado:** laboratório com dados autorizados ou sintéticos, fora das rotas e dos dados operacionais do marketplace.
+- **Estudo teórico:** análise, comparação ou decisão fundamentada. Uma leitura não comprova execução de um treinamento, integração ou implantação.
+- Cada tarefa registra objetivo, pré-requisitos, comportamento incluído, critérios de conclusão, validação e evidência. Estados aceitos: planejado, em andamento, bloqueado e concluído.
+- Uma capacidade experimental só entra no produto após avaliação e decisão explícita. A escolha de uma ferramenta para um laboratório não muda a stack da aplicação.
+- Documentar cobertura não autoriza custos, provisionamento, envio de dados privados, alterações em integrações protegidas ou execução automática de todos os exercícios.
+- A numeração organiza os assuntos; a execução segue as dependências dos marcos. Segurança, acessibilidade, gestão, qualidade e observabilidade começam nas primeiras entregas.
+
+## Estado conhecido e três critérios de entrega
+
+As fases de escopo e de base técnica têm conclusão histórica registrada em 12/11/2026. A base técnica da pasta principal contém a API Rust, conexões PostgreSQL/Redis, health checks, a tela de conectividade do frontend e o workflow de CI. A execução com serviços do Compose e a execução remota da CI permanecem como verificações operacionais pendentes. Este documento não declara novas verificações executadas.
+
+A fase de UX continua pendente de implementação e avaliação no estado de referência da aplicação. A tela de conectividade não comprova jornadas de usuário. As demais fases estão planejadas; registrar código e evidências de cada entrega antes de alterar esse estado.
+
+| Entrega                                   | Critério para considerar concluída                                                                                                                                                   | Evidência necessária                                                                                                            |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| Primeira demonstração integrada           | Percorrer cadastro, loja, publicação assistida, compra de peça pronta, pagamento de teste, entrega rastreada e transferência Connect de teste; cobrir as falhas críticas do recorte. | Roteiro reproduzível, verificações automatizadas com serviços simulados e roteiro manual com evidência no app e nos provedores. |
+| Marketplace completo do escopo aprovado   | Completar também encomendas/orçamentos, chat, gestão dos trabalhos, acompanhamento e dashboard; fechar as regras pendentes antes de cada implementação.                              | Critérios funcionais, contratos, testes de permissão e falha, jornadas avaliadas e documentação da operação.                    |
+| Cobertura integral do aprendizado técnico | Atender todos os tópicos do plano de estudo por aplicação no projeto, exercício separado ou teoria, respeitando o nível prático exigido em cada tarefa.                              | Matriz atualizada com resultados reais, caminhos de evidência, medições, limites e pendências explícitas.                       |
+
+Uma demonstração concluída não conclui os laboratórios. Concluir os laboratórios não comprova que o marketplace está completo. Pagamentos reais e operação comercial não são requisitos desses critérios; qualquer mudança depende de decisão própria.
 
 ## Primeira demonstração integrada
 
-A primeira demonstração exercita um único caminho completo: artesão cria conta e loja, conclui o onboarding de teste do Stripe Connect, cadastra uma peça pronta com fotos e atributos fornecidos, recebe um rascunho de título e descrição gerado localmente por IA e revisa/aprova o texto; publica a loja ou produto e abre sua página pública diretamente; comprador cria/acessa uma conta, informa endereço de entrega no Smart Atelier e compra um único item; o estoque fica reservado por 30 minutos durante checkout hospedado pelo Stripe; após pagamento confirmado por webhook, o artesão registra transportadora e código para acompanhamento pelo Ship24; quando o Ship24 informa “entregue”, o backend inicia uma transferência de teste pelo Stripe Connect.
+### Jornada do artesão
 
-O cadastro não permite que a IA invente preço, materiais, medidas ou estoque. A quantidade inicial de peça única é 1. Checkout aceita apenas cartão de teste em BRL; a sessão expira em 30 minutos. Recusa de uma tentativa permite usar outro cartão e mantém a reserva; apenas a expiração final sem pagamento libera o estoque. O endereço é coletado no Smart Atelier antes do checkout, excluído se a compra expirar e mantido em pedido pago para envio. O backend confirma o pagamento por webhook, não pelo retorno do navegador. Em modo de teste, separate charges and transfers envia 100% do valor do item ao saldo Connect do artesão, sem comissão demo; o repasse bancário segue o cronograma configurado no Connect. Não fazem parte desta demonstração encomendas, chat, busca de catálogo, carrinho com vários itens/lojas, cálculo de frete, etiqueta de envio, pagamentos reais ou operação comercial. O Ship24 foi aprovado no plano grátis de 10 rastreamentos por mês, sem excedente; Correios é a cobertura mínima a validar antes da integração. O primeiro ambiente será local, com webhooks recebidos por túnel HTTPS temporário. A arquitetura usa SvelteKit no frontend, API Rust com Axum/Tokio, PostgreSQL/SQLx, Redis para fila/retries, Ollama local e filesystem local para imagens. Redis agenda trabalho; o estado de negócio e a proteção contra efeitos duplicados permanecem no PostgreSQL e nos mecanismos idempotentes do provedor.
+1. Criar uma conta e a loja. Login próprio e Google resolvem para uma conta interna; a mesma conta pode comprar e vender.
+2. Concluir o onboarding do Stripe Connect em modo de teste antes de publicar um item à venda.
+3. Cadastrar uma peça pronta com uma ou mais fotos, categoria/tipo, materiais, técnica, medidas e unidades ou indicação de não aplicável, preço, BRL e quantidade disponível. Peça única começa com quantidade 1; cor, acabamento e cuidados são opcionais.
+4. Solicitar ao Ollama local uma proposta de título e descrição a partir das informações e fotos. A IA não inventa nem altera preço, materiais, medidas ou estoque.
+5. Revisar, editar e aprovar o texto antes da publicação. Abrir diretamente a página pública da loja ou da peça.
 
-Esse recorte demonstra uma jornada integrada; as fases seguintes continuam expandindo a aplicação completa. Laboratórios e teoria permanecem separados quando os tópicos não pertencem naturalmente ao marketplace.
+### Jornada do comprador e entrega
 
-## Prioridade aprovada de entrega
+1. Abrir o link público e autenticar-se antes de iniciar a compra de um único item.
+2. Informar o endereço no Smart Atelier e revisar o pedido antes do redirecionamento.
+3. Iniciar a Checkout Session hospedada pelo Stripe, somente com cartão de teste em BRL. Reservar o estoque por 30 minutos. A recusa de uma tentativa mantém sessão e reserva ativas para outra tentativa; liberar a quantidade após expiração final confirmada sem pagamento.
+4. Confirmar o pagamento exclusivamente por evento autenticado do Stripe. O retorno do navegador não muda o pedido para pago. Apagar o endereço quando a sessão expirar sem pagamento; manter o endereço no pedido pago para envio e acompanhamento.
+5. O artesão registra transportadora e código após enviar o pacote. O rastreamento aparece no app e no Ship24.
+6. Quando um evento Ship24 autenticado e válido indicar entrega, iniciar uma única transferência de teste de 100% do valor do item ao saldo Stripe Connect do artesão, sem comissão da plataforma na demonstração. O envio posterior ao banco segue o cronograma Connect.
 
-Sequência por dependências, sem datas ou estimativas aprovadas. O primeiro objetivo é demonstrar uma jornada vertical completa; depois, expandir o marketplace e aprofundar as capacidades de IA. Segurança, acessibilidade, qualidade e observabilidade atravessam todas as entregas.
+O fluxo usa _separate charges and transfers_ apenas em teste. PostgreSQL guarda estado e registros de idempotência; Redis agenda processamento e retries. Eventos repetidos, fora de ordem ou em falha não antecipam nem duplicam efeitos. O fluxo de referência é `awaiting_payment` → `paid` → `shipped` → `delivered` → `transfer_pending` → `transferred`; a expiração sem pagamento encerra a tentativa pendente. Rastreamento indisponível ou em exceção não libera transferência.
 
-| Marco | Resultado | Fases relacionadas | Dependências e limites |
-| --- | --- | --- | --- |
-| 1. Base de desenvolvimento | API Rust inicial, PostgreSQL, Redis, ambiente local e verificações automatizadas. | 1; partes de 14–16. | Contratos e configuração definidos; não criar infraestrutura sem uso aprovado. |
-| 2. Artesão e publicação assistida | Conta, loja, Connect onboarding de teste, cadastro de peça/imagens, rascunho Ollama revisado e página pública. | 2–4 e parte de 8. | Conta/loja e regras da primeira demonstração; storage local. |
-| 3. Compra e pagamento de teste | Conta do comprador, endereço, reserva de estoque, Checkout hospedado em BRL e confirmação por webhook. | Parte de 3–6. | Checkout de cartão; 30 min de reserva; sem carrinho ou frete calculado. |
-| 4. Entrega e transferência | Registro de transportadora/código, tracking no app e Ship24, evento de entrega e transferência Connect de teste. | Parte de 6 e 16–17. | Correios validado no Ship24; máximo 10 rastreamentos mensais gratuitos; sem transferências reais. |
-| 5. Marketplace completo | Descoberta, encomendas/orçamentos, chat, acompanhamento completo, dashboard e suporte. | 3–7. | Requer fechar T03–T06; funcionalidades não incluídas na primeira demonstração não são automaticamente aprovadas para implementação. |
-| 6. IA aplicada ampliada e cobertura de aprendizado | Avaliar RAG, MCP, agentes e demais tópicos; integrar ao produto somente capacidades aprovadas, mantendo laboratórios e teoria independentes. | 8–15 e matriz de cobertura. | Usar dados autorizados, baseline, limites e avaliação; custos externos exigem autorização própria. |
+Antes de integrar o rastreamento, validar a cobertura dos Correios e as condições atuais do Ship24. O limite aceito para o demo é de até 10 rastreamentos por mês no plano gratuito, sem excedente cobrado; a cota não deve ser consumida pela CI. Se a cobertura ou gratuidade não atender ao recorte, registrar o bloqueio e rever a escolha antes de executar a integração.
 
-Esta ordem foi aprovada em 12/11/2026. Os marcos não têm datas nem estimativas. A aprovação do roadmap não autoriza automaticamente a implementação das funcionalidades.
+O primeiro ambiente é local: SvelteKit/TypeScript/Tailwind no frontend, Rust/Axum/Tokio para a API, PostgreSQL/SQLx, Redis, Ollama, imagens no filesystem por interface substituível e túnel HTTPS temporário para webhooks. Provedores e hospedagem de produção permanecem em aberto.
+
+Ficam fora da primeira demonstração: encomendas e negociação de orçamento, chat, descoberta por busca de catálogo, carrinho com múltiplos itens ou lojas, produção personalizada, cotação/cálculo de frete, emissão de etiqueta, cancelamento após pagamento, reembolso, disputa, pagamento real e lançamento comercial. Os itens aprovados para o produto completo entram depois do refinamento das regras correspondentes.
+
+## Prioridade aprovada dos marcos
+
+A ordem abaixo foi aprovada em 12/11/2026 e permanece sem datas ou estimativas de duração. As fases são executadas parcialmente quando isso permite completar a jornada vertical; pagamento de peça pronta não depende da implementação de encomendas ou chat.
+
+| Marco                                           | Resultado esperado                                                                                                      | Trabalho necessário                                                                            | Limites e dependências                                                                                                                |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Base de desenvolvimento                         | API Rust inicial, PostgreSQL, Redis, ambiente local e verificações automatizadas.                                       | Base técnica, configuração, qualidade e segurança inicial.                                     | Conclusão histórica registrada; verificar Compose ativo e CI remota antes de depender dessas execuções.                               |
+| Artesão e publicação assistida                  | Conta, loja, Connect onboarding de teste, peça/imagens, rascunho Ollama revisado e página pública.                      | UX, identidade, lojas, cadastro de trabalhos e primeira integração de IA.                      | Regras de publicação, armazenamento local, isolamento por conta e avaliação do rascunho.                                              |
+| Compra e pagamento de teste                     | Comprador autenticado, endereço, reserva e Checkout hospedado com confirmação por webhook.                              | Identidade, página da peça, contrato de pedido de item pronto e pagamentos.                    | Cartão de teste, BRL, reserva de 30 minutos; sem carrinho, encomendas ou frete calculado.                                             |
+| Entrega e transferência                         | Transportadora/código, tracking, entrega e transferência Connect de teste.                                              | Rastreamento, eventos, fila/retries, idempotência e validação ponta a ponta.                   | Correios validado no Ship24, até 10 rastreamentos mensais e credenciais de teste.                                                     |
+| Marketplace completo                            | Gestão completa de trabalhos, descoberta selecionada, encomendas/orçamentos, chat, acompanhamento, dashboard e suporte. | Refinamento de regras e expansão das jornadas já aprovadas.                                    | Fechar detalhes de conta, visibilidade, encomendas, suporte e pagamentos antes de cada entrega. Novas funcionalidades exigem decisão. |
+| IA aplicada ampliada e cobertura do aprendizado | Estudar e avaliar todos os tópicos técnicos, integrando ao produto apenas capacidades aprovadas.                        | APIs multimodais, RAG, MCP, agentes, ML, fine-tuning, gestão, arquitetura, segurança e DevOps. | Dados autorizados, baseline, limites e evidências; laboratórios independentes e custos autorizados quando necessários.                |
+
+## Visão geral das fases
+
+| Fase                                          | Resultado esperado                                                   | Pré-requisitos principais                                        | Estado                                                         |
+| --------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| Escopo, arquitetura e plano de entrega        | Projeto integrador, primeira demonstração e prioridades registrados. | Decisões da aplicação.                                           | Concluída no planejamento, historicamente.                     |
+| Base técnica e fluxo de desenvolvimento       | Ambiente, API inicial, serviços e verificações disponíveis.          | Escopo e arquitetura inicial.                                    | Concluída historicamente; verificações operacionais pendentes. |
+| UX, protótipos e acessibilidade               | Jornadas navegáveis avaliadas.                                       | Recorte demonstrável e linguagem do domínio.                     | Pendente na pasta principal.                                   |
+| Contas, autenticação e lojas                  | Identidade e permissões validadas no Rust.                           | Base técnica, UX e regras de conta/loja.                         | Planejada.                                                     |
+| Catálogo e descoberta                         | Trabalhos e páginas públicas; descoberta posterior selecionada.      | Identidade, loja, mídia e regras de publicação.                  | Planejada.                                                     |
+| Encomendas, chat e pedidos                    | Orçamento negociado, aceite, histórico e acompanhamento.             | Contas/lojas, trabalhos e regras de encomenda.                   | Planejada; expansão após a primeira demonstração.              |
+| Pagamento, entrega e repasse                  | Compra de item pronto e transferência de teste após entrega.         | Conta, peça pública, contrato de pedido e integração de eventos. | Planejada; independe de encomendas/chat para o demo.           |
+| Dashboard, suporte e operação                 | Indicadores rastreáveis e ferramentas de acompanhamento.             | Eventos de negócio e definições de suporte.                      | Planejada.                                                     |
+| IA generativa e multimodal                    | Rascunho aprovado no demo e experimentos avaliados.                  | Dados autorizados, baseline e limites.                           | Planejada.                                                     |
+| Busca semântica e RAG                         | Recuperação com fontes e avaliação de relevância.                    | Corpus autorizado, esquema de acesso e baseline.                 | Planejada; laboratório primeiro.                               |
+| MCP e integração programática                 | Servidor/cliente e composição demonstrados com segurança.            | Contratos de laboratório e autenticação.                         | Planejada; laboratório primeiro.                               |
+| Agentes e orquestração                        | Agentes limitados comparados a alternativas determinísticas.         | Ferramentas, contexto, avaliação e controles de autonomia.       | Planejada; laboratório primeiro.                               |
+| Laboratórios de ML no navegador               | Treino real, vídeo e jogos avaliados.                                | Fundamentos, dados e recursos locais.                            | Planejada.                                                     |
+| Dataset, fine-tuning e avaliação              | Dados e treinamento real avaliados contra baseline.                  | Dados autorizados, modelo compatível e recursos aprovados.       | Planejada.                                                     |
+| Segurança, privacidade e governança           | Controles, responsabilidades e riscos verificáveis.                  | Transversal desde o planejamento.                                | Planejada, aplicada progressivamente.                          |
+| Infraestrutura, observabilidade e resiliência | Ambiente reproduzível e operação avaliada.                           | Necessidade concreta do demo ou laboratório isolado.             | Planejada, aplicada progressivamente.                          |
+| Qualidade ponta a ponta                       | Contratos, jornadas, acessibilidade e falhas comprovados.            | Comportamentos implementados no recorte avaliado.                | Planejada, aplicada progressivamente.                          |
+| Implantação e demonstração integradora        | Entrega reproduzível e avaliação dos três critérios de conclusão.    | Recorte correspondente implementado e validado.                  | Planejada.                                                     |
 
 ## Fases detalhadas
 
 ### Fase 0 — Escopo, arquitetura e plano de entrega
 
-**Estado: concluída no planejamento em 12/11/2026.** T01, T02 e T08 foram definidos; a arquitetura inicial e os marcos de entrega foram aprovados. Nenhuma funcionalidade de produto foi implementada nesta fase. Validar cobertura dos Correios no plano gratuito Ship24 antes de integrar o rastreamento na fase de implementação.
+**Estado:** concluída no planejamento em 12/11/2026, conforme o registro histórico. A conclusão cobre a definição do projeto integrador, da primeira demonstração, da arquitetura inicial e da ordem dos marcos; não comprova entrega de produto nem cobertura de todos os estudos.
 
-Tratar o marketplace completo como projeto integrador modular; reservar laboratórios e teoria para tópicos que não se encaixam no produto. Definir público, proposta de valor, primeira demonstração, marcos, backlog, stack, riscos e critérios. Usar IA para apoiar requisitos, decomposição e priorização, com revisão humana.
+**Aplicação e pré-requisitos:** planejamento do projeto; decisões confirmadas de público, papéis, vendas e aprendizado.
 
-**Tópicos relacionados:** definição de escopo e proposta de valor; requisitos, histórias e critérios de aceite; decomposição, priorização, cronograma e capacidade; escolha entre IA e regras determinísticas; arquitetura modular e plano do projeto integrador.
+**Trabalho e assuntos:** definir proposta de valor, limites da demonstração, histórias e critérios; separar aplicação, exercícios e teoria; usar IA com revisão para decomposição e priorização; decidir IA versus lógica determinística, considerando latência, precisão, custo e desempenho; manter backlog e riscos. As simulações de cronograma e capacidade pertencem à trilha transversal de gestão e não criam datas aprovadas.
 
-**Saída:** escopo aprovado, decisões registradas, dependências, arquitetura inicial e prioridades documentadas.
+**Critério de conclusão:** decisões e pendências identificáveis, marcos ordenados, fronteiras da arquitetura e critérios da demonstração descritos. Novas revisões mantêm o histórico e não apresentam propostas como decisões.
+
+**Evidência:** [decisões da aplicação](docs/decisions.md), [arquitetura inicial](docs/architecture.md) e marcos deste roadmap. Registrar alterações futuras com contexto e consequências.
 
 ### Fase 1 — Base técnica e fluxo de desenvolvimento
 
-**Estado: concluída em 12/11/2026.** A base técnica foi implementada e as verificações locais de Rust e frontend passaram. A configuração de CI e os serviços locais estão documentados. A inicialização de PostgreSQL/Redis via Compose e a execução remota do GitHub Actions não foram verificadas neste ambiente; ficam como verificações operacionais, sem bloquear a conclusão da fase.
+**Estado:** concluída historicamente em 12/11/2026. O registro informa verificações locais de Rust/frontend aprovadas na ocasião; não representa uma nova execução nesta revisão. Compose com PostgreSQL/Redis ativos e CI remota ainda precisam de evidência operacional.
 
-**Concluído:** API HTTP inicial; configuração local documentada; checagens de qualidade e build automatizadas em GitHub Actions; comunicação frontend/backend para health; lockfile Rust versionado; regras e instruções atualizadas.
+**Aplicação e pré-requisitos:** engenharia do projeto; escopo e arquitetura inicial aprovados.
 
-**Próximas verificações:** iniciar os serviços com Docker Compose e confirmar `/health/ready`; observar uma execução da CI no GitHub. Os contratos de API, schema e migrações serão definidos junto a cada funcionalidade aprovada, antes de sua implementação.
+**Trabalho e assuntos:** manter Svelte 5, TypeScript, SvelteKit 3, Tailwind, Vite+ e Bun; Rust/Axum/Tokio, SQLx/PostgreSQL e Redis; configuração por ambiente e segredos no servidor; health checks, documentação e CI. Estudar prompts para codar, depurar, documentar e aprender; regras de IDEs/agentes; scaffolding, revisão de código e refatoração assistida. Comparações de Cursor, VS Code, Windsurf e outros assistentes ficam como estudo, sem exigir adoção de todos.
 
-Manter o monorepo com Svelte 5, TypeScript, SvelteKit, Vite+ e Rust. Para a demonstração, estabelecer a API com Axum/Tokio, PostgreSQL/SQLx e Redis. Definir contratos, módulos por funcionalidade, ambientes, CI e padrões de documentação. Usar ferramentas de desenvolvimento assistidas somente com revisão de mudanças e verificações.
+**Critério de conclusão:** ambiente descrito, lockfiles versionados, API inicial e conectividade disponíveis; checks reais documentados. Verificar `/health/ready` com os serviços ativos e observar uma execução remota da CI antes de declarar esses cenários validados.
 
-**Tópicos relacionados:** engenharia de prompts para desenvolvimento; ferramentas de programação assistida; agentes de código; scaffolding e refatoração; automação de qualidade e pipelines de integração contínua.
-
-**Saída:** builds repetíveis, verificações automatizadas e instruções de desenvolvimento.
+**Evidência:** arquivos de configuração, código de health, workflow e instruções do [README](README.md). Logs/URLs de novas execuções entram no registro de evidências quando existirem.
 
 ### Fase 2 — UX, protótipos e acessibilidade
 
-Pesquisar jornadas de comprador e vendedor, criar wireframes e protótipos, avaliar usabilidade e implementar interface responsiva em Svelte. Planejar acessibilidade, navegação e estados de carregamento, erro e ausência de dados.
+**Estado:** pendente na pasta principal; a tela de conectividade não comprova as jornadas desta fase.
 
-**Tópicos relacionados:** pesquisa e ideação assistidas; geração de wireframes por texto; prototipação visual; conversão de design em interface; avaliação de usabilidade e acessibilidade.
+**Aplicação e pré-requisitos:** protótipo do projeto e exercícios de ferramentas de design; recorte da demonstração e regras de idioma. Toda interface e código permanecem em inglês.
 
-**Saída:** jornadas priorizadas, protótipos avaliados e componentes iniciais validados.
+**Trabalho e assuntos:** mapear artesão e comprador, telas e estados; usar IA para pesquisa/ideação como hipótese, wireframes, mockups e text-to-UI; converter design em Svelte e revisar componentes. Comparar Figma, Firebase Studio, ferramentas de prototipação e CLI assistida em laboratório; estudar prompts HTML/CSS/TypeScript, geração de componentes e refatoração. Planejar automação E2E com agentes/MCP, distinguindo chamadas de ferramenta de interação real com a UI.
+
+**Critério de conclusão:** protótipo navegável das jornadas demonstrativas, estados de carregamento/erro/vazio/sucesso, rascunho explicitamente simulado, checkout sem coleta real de cartão e navegação sem telas sem saída; revisão guiada com a usuária; teclado, foco, labels, contraste e largura móvel verificados. Conteúdo gerado não conta como pesquisa com participantes.
+
+**Evidência:** design, protótipo integrado à branch de trabalho, capturas móvel/desktop, roteiro de avaliação e problemas encontrados/corrigidos. A existência de um protótipo não comprova autenticação ou integração financeira.
 
 ### Fase 3 — Contas, autenticação e lojas
 
-Implementar cadastro e sessão com login próprio e Google, criação de loja, papéis, permissões e isolamento dos dados. A conta autenticada será a conta interna do Smart Atelier, que controla papéis e lojas. Incluir onboarding Stripe Connect de teste antes de habilitar a publicação à venda. Validar autorização no backend Rust para cada operação, sem depender de controles da interface.
+**Estado:** planejada.
 
-**Tópicos relacionados:** autenticação para ferramentas e MCP; tokens de serviço e controle de acesso; governança, responsabilidade, riscos, privacidade e segurança dos dados.
+**Aplicação e pré-requisitos:** produto; base técnica e UX, contrato de identidade, regras de perfil, sessão, loja e recuperação de conta antes das operações afetadas.
 
-**Saída:** fluxos de conta e loja testados, inclusive tentativas de acesso indevido.
+**Trabalho e assuntos:** cadastro e login próprio/Google para uma conta interna, criação de loja e papéis; a mesma conta pode comprar e vender; onboarding Stripe Connect de teste antes da venda; autorização no Rust e isolamento entre contas/lojas. Estudar autenticação de ferramentas, tokens de serviço, revogação, quotas e governança usando contratos separados de laboratório.
+
+**Critério de conclusão:** comprador autentica antes do checkout; artesão cria e gerencia somente sua loja; publicação à venda depende do onboarding; permissões continuam efetivas com requisição HTTP direta; sessões inválidas, expiradas e acesso a outra loja são negados. Quantidade de lojas e demais regras pendentes são decididas antes de sua implementação.
+
+**Evidência:** contratos, migrações correspondentes, testes de autorização, jornadas de conta/loja e roteiro de onboarding de teste; nenhum segredo em logs ou frontend.
 
 ### Fase 4 — Catálogo e descoberta
 
-Implementar cadastro de peças prontas, imagens, atributos, visibilidade e disponibilidade conforme as decisões aprovadas. Para a primeira demonstração, abrir diretamente a página pública da loja ou do produto e oferecer compra de um item por pedido, sem catálogo de busca. Criar busca e filtros nas etapas posteriores; avaliar busca semântica em laboratório antes de selecioná-la para o produto.
+**Estado:** planejada.
 
-**Tópicos relacionados:** embeddings e busca por similaridade; busca híbrida e múltiplos índices; personalização e busca semântica na interface.
+**Aplicação e pré-requisitos:** produto para cadastro/páginas públicas; exercícios de recuperação e personalização. Identidade, loja, autorização, mídia e regras de publicação.
 
-**Saída:** artesão gerencia trabalhos e comprador encontra itens com atributos confirmados.
+**Trabalho e assuntos:** cadastrar/editar peças com dados fornecidos e imagens; separar existência, visibilidade, estoque e disponibilidade. No demo, peça pronta e abertura direta por link público; busca/filtros e demais estados completos entram após refinamento. Em laboratório, comparar busca textual, embeddings, similarity search, busca semântica/híbrida, múltiplos índices e personalização com controles do usuário.
+
+**Critério de conclusão:** edição/publicação autorizadas, preço/moeda/quantidade explícitos, página pública coerente com disponibilidade e ausência de dados; arquivo de mídia validado e protegido por limite/autorizações. Cada forma de descoberta selecionada tem baseline e relevância avaliada antes de entrar no produto.
+
+**Evidência:** contratos de trabalho/mídia, migrações, testes de acesso e validação, páginas públicas, consultas de avaliação e resultados de recuperação quando executados.
 
 ### Fase 5 — Encomendas, chat e pedidos
 
-Definir estados e histórico; construir solicitação e negociação de orçamento, chat humano e acompanhamento do pedido. Preservar os termos aceitos e validar autorização em cada transição.
+**Estado:** planejada para expansão; não bloqueia o checkout de peça pronta da primeira demonstração.
 
-**Tópicos relacionados:** integração de IA pelo backend; chat de suporte; resumo de conversas e extração de ações; integração de interface com APIs.
+**Aplicação e pré-requisitos:** produto; contas/lojas, trabalhos e definição de conteúdo, validade, aceite, alterações, prazos, estados, notificações e permissões da encomenda.
 
-**Saída:** jornada de encomenda e pedido coberta por testes de sucesso, alteração, erro e permissão.
+**Trabalho e assuntos:** solicitação e negociação de orçamento, chat humano e acompanhamento interno; preservar os termos aceitos; pagamento integral após aceite e antes da produção; definir histórico e transições. Resumo assistido, extração de ações e chatbot de suporte são estudos/candidatos com avaliação e decisão própria.
+
+**Critério de conclusão:** comprador/vendedor negociam e acompanham sem acessar conversa/pedido alheio; mudanças de orçamento preservam histórico e aceite; transições respeitam pagamento/produção; falhas e reconexão não duplicam mensagens ou pedidos. As sugestões de IA, quando aprovadas, não aceitam orçamento nem alteram finanças por conta própria.
+
+**Evidência:** especificação dos fluxos, schemas/contratos, testes de estados/permissões, jornadas avaliadas e histórico reproduzível.
 
 ### Fase 6 — Pagamento, entrega e repasse
 
-Na demonstração, usar Stripe Checkout hospedado, somente cartão de teste em BRL, e Stripe Connect com separate charges and transfers. A reserva de estoque dura 30 minutos; pagamento confirmado é reconhecido por webhook e checkout expirado sem pagamento libera a unidade. Recusa de cartão por tentativa mantém a sessão ativa e permite nova tentativa. Após envio informado pelo artesão, acompanhar transportadora e código no Ship24. Somente a confirmação de entrega pelo Ship24 inicia automaticamente uma transferência de 100% do valor do item ao saldo Connect; o envio à conta bancária segue o cronograma Connect. Validar a cobertura necessária e os limites gratuitos antes de depender do Ship24. Tratar webhooks duplicados, fora de ordem e falhas usando PostgreSQL para estado/idempotência e Redis para fila e retries. Pagamentos de produção, disputas e prazos operacionais continuam dependendo de decisão própria.
+**Estado:** planejada.
 
-**Tópicos relacionados:** APIs autenticadas no servidor; permissões e segurança MCP; comandos com aprovação humana, auditoria e proteção de dados.
+**Aplicação e pré-requisitos:** produto no recorte de teste; conta autenticada, loja habilitada no Connect, peça disponível, contrato de pedido de item pronto, endereço, eventos e idempotência. A encomenda exige regras adicionais apenas na expansão correspondente.
 
-**Saída:** contratos e transições validados em ambiente de teste, respeitando as decisões financeiras.
+**Trabalho e assuntos:** executar a jornada financeira e de entrega definida neste roadmap: Stripe Checkout hospedado, cartão de teste/BRL, reserva de 30 minutos, webhook autenticado, transportadora/código, Ship24 e transferência após entrega. Estudar integrações seguras, permissões, auditoria, execução idempotente e ações com aprovação em exercícios próprios; a automação financeira do demo segue regras determinísticas.
+
+**Critério de conclusão:** pagamento confirmado só pelo backend; tentativa recusada mantém reserva; expiração final sem pagamento libera quantidade e remove endereço; concorrência não vende a mesma unidade duas vezes; webhook inválido não produz efeito; duplicação, desordem, falha temporária e retomada não duplicam cobrança/transferência. Entrega válida inicia uma transferência de 100% do item; tracking incerto não inicia transferência.
+
+**Evidência:** testes automatizados com Stripe/Ship24 simulados, testes de persistência/fila, trilhas sanitizadas de eventos e roteiro manual de sandbox com estado no app e no dashboard dos provedores. Registrar verificação de Correios/cota; não alegar integração externa real a partir de mock.
 
 ### Fase 7 — Dashboard, suporte e operação
 
-Definir indicadores, fontes e permissões; construir acompanhamento de vendas e ferramentas de suporte. Avaliar respostas assistidas por IA com referências e revisão humana, se aprovadas.
+**Estado:** planejada.
 
-**Tópicos relacionados:** assistente e personalização de suporte; RAG sobre documentação; relatórios de status; métricas de resultados e objetivos.
+**Aplicação e pré-requisitos:** produto e processo interno; eventos de pedidos/pagamentos e definição dos indicadores, filtros, fontes e permissões de suporte.
 
-**Saída:** indicadores definidos e demonstráveis, com origem dos dados explicada.
+**Trabalho e assuntos:** dashboard do vendedor e acompanhamento operacional; diferenciar valor vendido, recebido, transferido e períodos; definir suporte e responsabilidades. Estudar síntese de dados, relatórios para públicos diferentes, métricas de outcome/OKRs, RAG de documentação e personalização de suporte. Assistência de IA depende de avaliação e aprovação própria.
+
+**Critério de conclusão:** cada indicador tem definição, fonte e exemplo verificável; acesso respeita conta/loja; status e relatórios reproduzem os mesmos fatos; valores não são inventados quando faltam dados. Limites de suporte e ações administrativas são definidos antes de implementar.
+
+**Evidência:** catálogo de métricas, consultas e testes, dashboard demonstrável, relatórios confrontados com eventos e roteiro das permissões operacionais.
 
 ### Fase 8 — IA generativa e multimodal
 
-Na primeira demonstração, usar Ollama local para rascunhar título e descrição a partir dos dados informados e fotos do produto. O artesão revisa e aprova antes da publicação; a IA não preenche preço, materiais, medidas ou quantidade. Manter credenciais no servidor para provedores futuros e medir qualidade, latência e uso de recursos. Outros modelos, áudio, vídeo e OCR ficam em avaliação ou laboratórios até aprovação específica.
+**Estado:** planejada; a geração de título/descrição integra o recorte inicial, os demais tópicos são estudos ou exercícios até seleção.
 
-**Tópicos relacionados:** provedores de modelos e engenharia de prompts; encadeamento, custo e cache; análise de texto, imagem, áudio e vídeo; OCR; bots multimodais; roteamento entre modelos e streaming.
+**Aplicação e pré-requisitos:** rascunho de anúncio no projeto, comparações e multimodalidade em laboratório; dados autorizados, baseline, limites de recursos e interface de provedor no Rust.
 
-**Saída:** comparações reproduzíveis; somente capacidades aprovadas passam ao produto.
+**Trabalho e assuntos:** estudar IA como serviço, wrappers e valor de produto; modelos abertos/proprietários, OpenAI, Anthropic, Hugging Face, Gemini, OpenRouter e Ollama; APIs, autenticação, versionamento e testes; prompt templates/chaining, previsibilidade, alucinações, tokens e custo; semantic/prompt cache, reúso de contexto, roteamento de modelos/intenções e streaming. Comparar LangChain/Pipes e equivalentes Rust para retries/logging/debug. Em exercícios, texto/imagem/áudio/vídeo, Vision, transcrição com Whisper ou alternativa, OCR/compreensão de documentos, análise de mídia e bot multimodal combinado. Comparar cliente/servidor e Firebase AI Logic em laboratório sem deslocar regras do produto para o frontend.
+
+**Critério de conclusão:** para o demo, Ollama rascunha apenas título/descrição fundamentados em atributos/fotos; artesão revisa e aprova, e a falha do modelo permite continuidade manual. Comparações têm dados fixos, qualidade, latência, custo/recursos e análise de erros; cada modalidade tem entrada e resultado real identificáveis. Caches preservam isolamento e invalidação, stream pode ser cancelado, retries têm limite e segredos ficam no servidor. Substituições de ferramentas registram o aprendizado realizado e o que permaneceu sem execução.
+
+**Evidência:** prompts/schemas versionados, contrato e adaptador, conjunto de avaliação, baseline, resultados por modalidade, benchmark, testes e limitações. Uma chamada de inferência não comprova treinamento.
 
 ### Fase 9 — Busca semântica e RAG
 
-Criar laboratório de embeddings, armazenamento vetorial e recuperação. Se escolhido, conectar políticas e documentos autorizados à busca ou ao suporte; citar fontes e abster-se quando não houver evidência.
+**Estado:** planejada; laboratório primeiro, integração ao produto condicionada à seleção da capacidade.
 
-**Tópicos relacionados:** embeddings, banco vetorial e busca por similaridade; RAG básico, híbrido, multi índice e agentic; recuperação de documentação e runbooks; agente com fontes consultáveis.
+**Aplicação e pré-requisitos:** exercício separado com políticas/documentos fictícios ou autorizados; corpus, acesso, baseline de busca textual, critério de relevância e ambiente vetorial de laboratório. PostgreSQL é a base do produto; capacidade vetorial específica depende de escolha e validação no exercício.
 
-**Saída:** corpus autorizado, avaliação contra baseline, respostas fundamentadas e controle de acesso.
+**Trabalho e assuntos:** embeddings, vector databases, similarity search, ingestão/chunking/indexação; RAG básico, Hybrid Search, Multi-Index e Agentic RAG; recuperação de políticas, documentação, runbooks e README/wiki; pipeline Rust com comparação de referência quando útil; falhas, observabilidade, avaliação e atualização do corpus.
+
+**Critério de conclusão:** comparar variantes em consultas rotuladas, medir recuperação e fundamentação, manter fontes consultáveis, abster-se sem evidência, respeitar isolamento e remover conteúdo excluído; separar fonte factual de prompt injection. Execução de runbook recuperado exige ferramenta e política próprias, sem dar autoridade ao texto recuperado.
+
+**Evidência:** corpus e procedência, parâmetros/índices, consultas, avaliações, respostas com fontes, testes de acesso/injeção e análise de erros. A evidência pode ser compartilhada com o laboratório operacional se cobrir os critérios de ambos.
 
 ### Fase 10 — MCP e integração programática
 
-Expor ferramentas autorizadas do catálogo e dos pedidos por servidor MCP em Rust. Testar schemas, clientes, composição, autenticação, quotas e ligação à interface. Regras de negócio e autorização permanecem no backend.
+**Estado:** planejada; servidor e clientes de laboratório antes de qualquer exposição de dados do produto.
 
-**Tópicos relacionados:** conceitos e arquitetura MCP; MCP versus tools; servidores, clientes e composição; integração com APIs e interface; autenticação, tokens, rate limiting e segurança; testes com clientes diferentes.
+**Aplicação e pré-requisitos:** exercícios separados de catálogo, CRM, billing, suporte, analytics e legado fictícios; contratos, dados autorizados e controles de autenticação. Uma integração com o marketplace depende de escopo específico aprovado.
 
-**Saída:** chamadas documentadas, testes de contrato e demonstração com cliente compatível.
+**Trabalho e assuntos:** protocolo, entrada/saída/contexto, cliente/servidor, recursos e ferramentas; MCP versus tools/plugins e API direta; servidor Rust, cliente TypeScript quando útil, organização e schemas; camada AI-ready; IDEs, copilots, agentes, UI/backend e composição de servidores. Estudar tokens de serviço, escopos, revogação, rate limiting, WAF e exposição segura; comparar múltiplos LLM clients e inspeção programática de contexto/interface.
+
+**Critério de conclusão:** descobrir e chamar capacidades autorizadas com entradas/erros validados; testar dois clientes, composição, nomes conflitantes e falha parcial; bloquear token inválido, excesso e acesso indevido. Demonstrar integração de UI com contrato real; MCP não comprova controle do DOM. Sistemas ERP/Oracle reais continuam sujeitos à proteção das instruções do projeto.
+
+**Evidência:** servidor/cliente, contratos, configuração sem segredos, testes negativos e de compatibilidade, traces e demonstração implantada em ambiente de laboratório autorizado.
 
 ### Fase 11 — Agentes e orquestração
 
-Começar com agente de escopo limitado, ferramentas validadas, orçamento de execução, auditoria e aprovação humana. Comparar ReAct, planejamento, reflexão, memória e padrões multiagente com fluxos determinísticos.
+**Estado:** planejada; exercícios com autonomia limitada.
 
-**Tópicos relacionados:** ciclos de agente, planejamento, execução, ferramentas e memória; ReAct, Plan-and-Execute e reflexão; function calling e schemas; gestão de contexto; grafos, retries e fallback; agentes únicos e multiagentes; roteamento, limites de autonomia, aprovação e auditoria.
+**Aplicação e pré-requisitos:** laboratório; ferramentas e schemas, fontes, limites, avaliação e casos de tarefa. Comparações que consumam RAG ou MCP dependem apenas dos contratos correspondentes, sem obrigar todos os agentes a usar ambos.
 
-**Saída:** avaliações contra baseline, limites de autonomia testados e histórico auditável.
+**Trabalho e assuntos:** loop percepção–raciocínio–ação–feedback; planner/executor/memory/toolbox; tipos task-based, interactive, goal-oriented e autonomous; Reactive, Memory-Enhanced e Tool-Using; ReAct, Plan-and-Execute e Self-Reflection. Function calling, JSON schemas e ferramentas REST/banco/automação/MCP; memória curta, longa, episódica/contextual, embeddings e revisão; context pruning/stitching, contexto ativo, global/local e compartilhamento. Grafos, dependências, roteamento, fallback, retries e retomada; colaboração, coordenação, negociação, comunicação assíncrona, estado/sincronização e padrões Sequential, Parallel, Supervisor, Hierarchical, Group Chat, Handoff, Delegation e Consensus. Comparar LangGraph, CrewAI, AutoGen, ADK e outros casos/frameworks em referências isoladas, preservando adaptação Rust explícita.
+
+**Critério de conclusão:** comparar agente único, padrões de execução e multiagentes na mesma tarefa e baseline determinístico; medir sucesso, passos, custo, latência e resiliência; demonstrar memória persistente/isolada e recuperação após falha, duplicação de mensagens e desacordo. Orçamento de tempo/passos/custo, tool allowlist, confidence thresholds calibrados, approval gates e circuit breakers interrompem loops/ações indevidas. Aprovação perde validade se ação/dados mudarem; nenhuma ferramenta financeira recebe autonomia aberta.
+
+**Evidência:** código/grafos, schemas, cenários, mensagens e resumos operacionais observáveis, traces sanitizados, testes de falha e comparação. Não exigir nem inventar acesso ao raciocínio interno do modelo.
 
 ### Fase 12 — Laboratórios de ML no navegador
 
-Em exercícios independentes, treinar uma pequena rede em TypeScript, separar dados de treino/validação/teste e avaliar inferência. Criar também demonstrações de visão em vídeo e de bot para jogo.
+**Estado:** planejada.
 
-**Tópicos relacionados:** história e fundamentos de IA, ML e DL; tensores, redes neurais e transformers; treino, validação e inferência em JavaScript; machine learning em vídeo e jogos; explicabilidade e avaliação de vieses.
+**Aplicação e pré-requisitos:** exercícios Svelte/TypeScript isolados; fundamentos, dataset autorizado, separação treino/validação/teste e recursos locais.
 
-**Saída:** código, dados autorizados, resultados reproduzíveis e limitações documentadas.
+**Trabalho e assuntos:** história da máquina inteligente e evolução IA/ML/DL/LLMs; tensores, redes neurais e aprendizado; transformers, attention e embeddings; primeira rede treinada em TypeScript, sem trocar treino por API de inferência. Aplicar detecção/tracking/filtros em vídeo autorizado no browser e bot/assistente/efeito dinâmico em minijogo; estudar deep learning em cenários reais, explicabilidade e vieses.
+
+**Critério de conclusão:** explicar fundamentos com exemplos; reproduzir treino com seed/configuração, curvas e avaliação reservada; vídeo comprova detecção, tracking e filtro com latência/qualidade medidas; bot baseado em modelo é comparado a um determinístico nos mesmos cenários. Explicações e resultados por grupo reconhecem limites da amostra.
+
+**Evidência:** notas e diagramas, código, datasets/fixtures, seeds, curvas, métricas, vídeo autorizado, partidas reproduzíveis e limitações de hardware/navegador.
 
 ### Fase 13 — Dataset, fine-tuning e avaliação
 
-Após definir dados autorizados e baseline, preparar conjuntos JSONL, avaliar a necessidade de ajuste, executar fine-tuning compatível e estudar LoRA/PEFT em ambiente isolado. Medir generalização, vieses e custos.
+**Estado:** planejada; execução depende de dados e recursos autorizados.
 
-**Tópicos relacionados:** decisão entre prompt, RAG e fine-tuning; preparação, balanceamento e versionamento de dados; ajuste via API; LoRA e PEFT; avaliação, testes A/B, overfitting e análise de vieses.
+**Aplicação e pré-requisitos:** estudo de decisão e laboratório de treinamento; baseline de prompt/RAG, procedência e autorização dos dados, modelo compatível, orçamento e hardware/runner adequados.
 
-**Saída:** pipeline e comparação reproduzíveis; treinamento real distinguido de mocks e chamadas de inferência.
+**Trabalho e assuntos:** escolher entre prompt, RAG e fine-tuning; coleta, limpeza, diversidade, balanceamento/padronização, deduplicação e JSONL; CLI Rust para preparação e jobs; API comercial com upload, hiperparâmetros, monitoramento e cancelamento; LoRA/PEFT versus full fine-tuning, com runner especializado isolado quando necessário; versionamento, implantação e observabilidade. Comparar modelos de domínio em chatbot/agente e API Svelte/Rust de laboratório.
+
+**Critério de conclusão:** dados sem vazamento entre treino/validação/teste; treino real e checkpoints/manifestos comprovados; comparação base/ajustados com precisão, consistência, adequação, performance, custo, generalização, vieses e overfitting; avaliação qualitativa cega e quantitativa. Executar A/B de laboratório com hipótese, variantes, alocação reproduzível, métrica e incerteza; dados offline/simulados não comprovam resultado com tráfego real. Falta de hardware/crédito ou suporte é pendência, não substituição silenciosa por mock.
+
+**Evidência:** inventário/versões de dados, testes de preparação, parâmetros, jobs/checkpoints sanitizados, métricas, avaliação A/B quando executada, contrato/demonstração e justificativa de ajuste ou adiamento.
 
 ### Fase 14 — Segurança, privacidade e governança
 
-Tratar modelagem de ameaças, isolamento entre lojas, prompt injection, segredos, retenção, revisão humana, auditoria, limites de custo e riscos aplicáveis desde o desenho até a operação.
+**Estado:** planejada e transversal; cada incremento aplica controles proporcionais antes de sua validação.
 
-**Tópicos relacionados:** governança e responsabilidade; interpretabilidade; vieses; gerenciamento de riscos; segurança e privacidade de dados; aspectos legais; revisão humana e custos financeiros.
+**Aplicação e pré-requisitos:** projeto, exercícios de ataques/mitigações e estudo teórico; inventário de dados/modelos/integrações e ameaças do recorte.
 
-**Saída:** controles testados, responsáveis definidos e riscos/limitações registrados.
+**Trabalho e assuntos:** responsabilidade humana, ética, riscos e limites de autonomia; interpretabilidade/explicabilidade e vieses; autorização e isolamento por loja, prompt injection, ferramentas indevidas, vazamento de segredos, retenção/exclusão, proveniência/licenças e questões legais; audit trails, políticas e controles de custo/tempo/tokens. Estudar os padrões Prompting, Responsible AI, UX, AI-Ops e Optimization nas decisões de arquitetura.
+
+**Critério de conclusão:** cada uso de IA tem finalidade, dados, responsável, risco, mitigação e avaliação; ações sensíveis obedecem política; permissões não dependem de conteúdo externo; testes negativos comprovam bloqueios e limites. Explicações distinguem fatos observáveis de hipóteses; auditorias legais/compliance registram aplicabilidade e questões pendentes sem alegar certificação.
+
+**Evidência:** modelo de ameaças, inventário, políticas, testes negativos, avaliação de vieses/explicações, registro de custos/limites e plano de resposta a incidentes. Revalidar regras externas quando forem utilizadas em uma implementação.
 
 ### Fase 15 — Infraestrutura, observabilidade e resiliência
 
-Para a demonstração, executar localmente e expor webhooks por túnel HTTPS temporário; Redis processa filas e retries junto ao backend Rust. Em ambiente de teste, estudar IaC, pipelines, containers, Kubernetes/GitOps, métricas, logs, traces, diagnóstico, FinOps e remediação com dry-run e aprovação. Dimensionar a infraestrutura a partir de necessidades verificadas.
+**Estado:** planejada; operação local do demo e laboratório avançado são entregas diferentes.
 
-**Tópicos relacionados:** observabilidade e retries para IA; infraestrutura como código; políticas e detecção de drift; Kubernetes, autoscaling, GitOps e estratégias de deploy; troubleshooting; métricas, logs, traces, alertas e anomalias; ChatOps; scanners e segurança de containers; CI/CD; FinOps; RAG de runbooks e autorremediação com dry-run e aprovação.
+**Aplicação e pré-requisitos:** ambiente local necessário ao projeto; cluster/ambiente descartável para práticas avançadas; necessidade concreta, dados e recursos autorizados. Não exigir Kubernetes, serverless ou autorremediação em produção para concluir a primeira demonstração.
 
-**Saída:** implantação reproduzível, alertas avaliados e procedimento de recuperação demonstrado.
+**Trabalho do demo:** PostgreSQL/Redis disponíveis, imagens persistidas fora do banco, fila e retries recuperáveis, logs estruturados e identificadores de correlação, health/readiness e túnel HTTPS temporário; procedimento de início, parada, recuperação e tratamento de quota indisponível.
+
+**Laboratórios e critérios por assunto:**
+
+| Assunto                               | Trabalho e critério de conclusão                                                                                                                                              | Evidência esperada                                                       |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Fundamentos de IA para infraestrutura | Comparar LLMs/APIs, OpenAI/Anthropic/Bedrock, LangChain/CrewAI/AutoGen, prompting/RAG técnico e validação de alucinações.                                                     | Arquitetura, comparação e casos de falha.                                |
+| Copilot de infraestrutura como código | NL→Terraform/Pulumi/Helm; executar validação/plan, OPA/Sentinel, revisão por PR e detecção de drift em módulo de teste.                                                       | IaC, planos, políticas, diffs e resultados antes/depois.                 |
+| Kubernetes e GitOps                   | YAML, readiness, HPA/VPA, métricas de workload, Ingress/Services/NetworkPolicy; comparar canary, blue-green/progressive delivery e Argo CD/Flux; demonstrar rollout/rollback. | Manifests, métricas e implantação reproduzível.                          |
+| Diagnóstico assistido                 | Usar fluxo ReAct e evidências para CrashLoopBackOff, ImagePullBackOff e OOMKilled; correlacionar logs/stack traces, Jaeger/Zipkin, latência e 5xx; validar correção.          | Cenários injetados, traces e relatório causal.                           |
+| AIOps e previsão                      | Gerar/validar PromQL e LogQL, dashboard Grafana, anomalias com Prophet/Isolation Forest ou comparação justificada, correlação e forecasting; medir erro e falsos alertas.     | Séries separadas, queries, dashboard, baseline e métricas.               |
+| ChatOps com aprovação                 | Laboratório Slack/Discord/Teams ou simulador identificado; comandos deploy/scale/rollback/investigar, diffs/impacto, RBAC, aprovação, circuit breakers e auditoria.           | Mensagens, políticas, testes de negação/expiração/duplicação e demo.     |
+| Segurança e compliance assistidos     | Comparar Snyk/Trivy/Checkov; scan IaC/container, segredo fictício, CVEs, política OPA e correção revisável; mapear SOC2/ISO27001/PCI-DSS sem alegar certificação.             | Scans antes/depois, PR/diff, política e relatório com limites.           |
+| CI/CD copilot                         | Comparar GitHub Actions/GitLab CI/Jenkins; gates de testes/SAST/DAST/dependências, impacto de PR, cache/build e rollback por qualidade.                                       | Pipelines, fixtures inválidas bloqueadas, tempos frio/quente e rollback. |
+| FinOps                                | Estimar delta de PR com Infracost, rightsizing, spot/reservadas, ociosidade, custos futuros e storage/networking; separar preços datados e dados simulados de cobrança real.  | Dataset, premissas, estimativas e erro/viabilidade.                      |
+| RAG de runbooks e incidentes          | Indexar playbooks/README/wiki; recuperar fontes, executar só comandos autorizados; gerar timeline, lições e post-mortem blameless sem inventar fatos.                         | Corpus, respostas, trilha e relatório de incidente.                      |
+| Remediação com guardrails             | Alerta→verificação→mitigação→validação, canary/rollback, circuit breaker/rate limiting, dry-run e aprovação para ações críticas.                                              | Playbooks e simulações de ação, recuperação e interrupção.               |
+| Copilot operacional integrado         | Combinar IaC, Kubernetes, observabilidade e políticas; reproduzir incidente/recuperação, apresentar resultados e analisar viabilidade/ROI com premissas.                      | Demo integrada, guia, métricas e custo/benefício estimado.               |
+
+**Critério de conclusão:** ambiente do demo reproduzível e recuperação testada; para cada laboratório, validações e limites registrados. Comparar arquiteturas enterprise/gateway/orquestração, serviços compartilhados e distribuição Kubernetes/serverless/edge sem introduzi-los automaticamente no monólito modular.
+
+**Evidência:** configuração local, runbook operacional, métricas/logs/traces sanitizados e artefatos específicos da tabela. Executar uma alternativa não comprova uso de todas as ferramentas comparadas.
 
 ### Fase 16 — Qualidade ponta a ponta
 
-Validar regras, contratos, permissões, eventos duplicados/fora de ordem, jornadas de compra e encomenda, falhas de IA e acessibilidade. Automatizar em CI com dependências externas simuladas; usar roteiro manual de sandbox para validar Stripe, Connect e Ship24 reais, respeitando as credenciais e quotas de teste.
+**Estado:** planejada e incremental.
 
-**Tópicos relacionados:** geração e revisão de testes; contratos backend/frontend; automação E2E com agentes e MCP; pipelines e gates de qualidade; auditoria documental; segurança, autorização e testes de falha.
+**Aplicação e pré-requisitos:** projeto e laboratório de automação com agentes; contratos e comportamentos do recorte em validação. A validação da primeira demonstração usa apenas as jornadas incluídas; a expansão adiciona encomendas/chat/dashboard.
 
-**Saída:** evidências dos cenários críticos e lista explícita de limitações restantes.
+**Trabalho e assuntos:** contratos frontend/backend, schema e migrações, autorização, concorrência, eventos duplicados/fora de ordem, fila/retries, pagamento/estoque e falhas da IA; acessibilidade e estados de UI; testes gerados por IA com revisão; E2E por ferramentas/agentes/MCP, auditoria documental e gates CI. Provedores externos são simulados na automação; sandbox manual confirma a integração real.
+
+**Critério de conclusão:** cenários críticos de sucesso/erro/permissão executados e evidenciados; nenhuma duplicação financeira ou venda indevida em testes de concorrência; testes observam comportamento relevante; confirmação externa não depende de retorno do navegador; limites de recursos/custo comprovados; regressões corrigidas. Build isolado não comprova jornada ou qualidade de modelo.
+
+**Evidência:** resultados de checks/testes por revisão, contratos, roteiros E2E, capturas/traces quando úteis, testes de falha e roteiro manual sanitizado de Stripe/Connect/Ship24 com quota respeitada; lista de cenários não executados.
 
 ### Fase 17 — Implantação e demonstração integradora
 
-Implantar a versão demonstrável no ambiente escolhido. Apresentar as jornadas e capacidades selecionadas, documentar arquitetura, configuração, métricas, custos, limitações e instruções para reproduzir a demonstração.
+**Estado:** planejada; executada por recorte, conforme os três critérios de entrega definidos no início.
 
-**Tópicos relacionados:** planejamento e arquitetura do projeto integrador; RAG e agentes; API backend documentada; MCP ligado à interface; CI/CD e implantação; demonstração, documentação, avaliação de resultados e justificativa das escolhas técnicas.
+**Aplicação e pré-requisitos:** demonstração do produto e apresentação técnica dos laboratórios; funcionalidades do recorte implementadas/validadas, ambiente escolhido e instruções reproduzíveis. A primeira demonstração local não depende de finalizar todos os laboratórios de IA.
 
-**Saída:** aplicação implantada, demonstração técnica e documentação reproduzível.
+**Trabalho e assuntos:** executar/implantar o recorte no ambiente autorizado, apresentar cadastro→venda→entrega e demais jornadas selecionadas; consolidar API documentada, frontend Svelte, arquitetura e CI/CD; demonstrar separadamente CLI, RAG, agente, MCP, UI programática e modelo ajustado quando os exercícios correspondentes forem concluídos. Explicar complexidade, alternativas, resultados, custos e limites.
 
-## Cobertura dos tópicos
+**Critério de conclusão:** outra pessoa segue o guia e reproduz a entrega; ambiente, dados, versões, comandos, contratos e recuperação documentados; resultados conferíveis contra baseline. Avaliar separadamente a primeira demonstração, o marketplace e a cobertura técnica; qualquer pendência permanece registrada. A implantação permanente depende de decisão de hospedagem e recursos, sem ser inferida do túnel local.
 
-Os títulos e descrições abaixo explicam os assuntos e resultados de cada fase.
+**Evidência:** README, diagramas, documentação de API, configuração/CI, roteiro e gravação, URL quando existir, relatórios e matriz de cobertura com evidências reais. Apresentação e avaliação técnica fazem parte do projeto; atividades de carreira permanecem excluídas.
 
-| Fase | Tópicos descritivos cobertos |
-| --- | --- |
-| 0 — Escopo e arquitetura | História e fundamentos de IA; engenharia de prompts para desenvolvimento; ferramentas de programação assistida; levantamento e decomposição de requisitos; histórias e critérios de aceite; priorização de backlog; cronograma, capacidade e estimativas; decisão entre IA e lógica determinística; arquitetura modular e proposta de valor. |
-| 1 — Base técnica | Regras para ferramentas de IA no desenvolvimento; agentes que geram código; scaffolding e refatoração assistidos; testes automatizados; integração contínua e qualidade de código. |
-| 2 — UX | Pesquisa e ideação com IA; geração de wireframes e interfaces por texto; prototipação visual; conversão de designs em Svelte; validação de usabilidade e acessibilidade. |
-| 3 — Contas e lojas | Autenticação e autorização; tokens de serviço; controle de acesso; governança, privacidade e segurança de dados. |
-| 4 — Catálogo | Dados e atributos de trabalhos; embeddings; busca por similaridade e busca semântica; recuperação híbrida; personalização da experiência. |
-| 5 — Encomendas | APIs backend para IA; chat de suporte; resumo de conversas; extração de decisões e ações; integração entre interface e backend. |
-| 6 — Pagamentos | Integrações seguras no servidor; permissões de ferramentas; comandos com aprovação; auditoria e proteção contra ações indevidas. |
-| 7 — Dashboard | Indicadores e objetivos; relatórios de status; síntese de informações para diferentes públicos; assistência de suporte baseada em documentação. |
-| 8 — IA generativa | Provedores e modelos; templates e encadeamento de prompts; controle de alucinações; custo, tokens e cache; entradas multimodais; OCR; processamento de imagem, áudio e vídeo; roteamento de modelos e streaming. |
-| 9 — RAG | Embeddings e armazenamento vetorial; RAG básico, híbrido, multi índice e agentic; busca em políticas, documentação e runbooks; respostas com fontes e abstenção quando necessário. |
-| 10 — MCP | Conceitos e arquitetura MCP; comparação com ferramentas tradicionais; criação e consumo de servidores; schemas; composição entre servidores e clientes; integração com APIs e UI; tokens, quotas e segurança. |
-| 11 — Agentes | Ciclo de percepção, decisão, ação e feedback; planejamento e execução; ReAct e reflexão; function calling; schemas JSON; memória e contexto; grafos, fallback e retries; colaboração multiagente; roteamento, limites e aprovação humana. |
-| 12 — ML no navegador | História de IA, ML e deep learning; tensores, redes neurais, transformers e attention; ciclo de treino/validação/inferência; classificação no browser; análise de vídeo e tracking; bots para jogos; avaliação de vieses e explicabilidade. |
-| 13 — Fine-tuning | Preparação e balanceamento de dados; formato JSONL; critérios para ajustar modelos; treinamento via API; LoRA e PEFT; avaliação quantitativa e qualitativa; testes A/B; generalização e overfitting. |
-| 14 — Segurança e governança | Gestão de riscos e responsabilidades; interpretabilidade; vieses; ética; segurança e privacidade; questões legais; governança de modelos; revisão humana e custos de IA. |
-| 15 — Infraestrutura | IaC e políticas como código; detecção de drift; Kubernetes, autoscaling e GitOps; estratégias de deploy e rollback; logs, métricas e traces; diagnóstico de incidentes; ChatOps; scanners de segurança; CI/CD; FinOps; RAG de runbooks; remediação segura. |
-| 16 — Qualidade ponta a ponta | Geração e validação de testes; contratos entre frontend e backend; automação E2E via ferramentas; auditoria de mudanças; gates de CI; segurança, permissões e testes de falha. |
-| 17 — Demonstração final | Ideação e arquitetura; RAG e agente; API documentada; MCP integrado; interface Svelte; implantação e CI/CD; resultados, documentação técnica e apresentação reproduzível. |
+## Trilha transversal — Gestão de projetos com IA
 
-Alguns assuntos aparecem em fases diferentes porque primeiro são estudados, depois praticados e, quando fizer sentido, integrados ao produto. As fases representam trabalho planejado; registre resultados e evidências ao concluí-las.
+Esta trilha acompanha o desenvolvimento e também usa exercícios para técnicas que precisem de histórico/equipe ou de integrações ainda inexistentes. Não cria cronograma, estimativa, cargo ou plataforma obrigatória. Dados sintéticos são identificados; saídas da IA são revisadas antes de alterar decisões ou escrever em serviços externos.
 
+| Assunto                                  | Aplicação e tarefa                                                                                                                        | Critério de conclusão                                                                      | Evidência esperada                           |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| Requisitos e escopo                      | Projeto: converter pedidos em épicos, histórias, mudanças e critérios; manter limites e dependências.                                     | Cada requisito preserva a decisão de origem e deixa propostas identificadas.               | Backlog e revisão das histórias.             |
+| Priorização do backlog                   | Exercício: aplicar RICE, WSJF e MoSCoW ao mesmo conjunto com apoio de IA; simular impactos.                                               | Cálculos reproduzíveis, premissas e diferenças de ranking explicadas.                      | Script/planilha e cenários.                  |
+| Cronograma, capacidade e alocação        | Exercício: modelar dependências, capacidade e cenários what-if de atraso/indisponibilidade.                                               | Cronograma respeita restrições e mostra repercussões; cenário não vira prazo aprovado.     | Modelo e comparações.                        |
+| Estimativas e previsões                  | Exercício: estimar esforço/custo/prazo com dados históricos ou sintéticos; simulação Monte Carlo.                                         | Distribuições, intervalos, seed e baseline; incerteza e origem dos dados explícitas.       | Dataset, simulador e relatório.              |
+| Riscos e mitigação                       | Projeto/exercício: detectar riscos de escopo, prazo e recursos, gargalos/anomalias e planos de mitigação.                                 | Cada alerta separa fato/hipótese/recomendação e tem avaliação de acerto/erro.              | Registro de riscos e métricas.               |
+| Reuniões, notas e follow-ups             | Exercício: transcrever conversa autorizada/fictícia; extrair decisões, pendências e ações; preparar calendário/board.                     | Não inventar responsável/prazo; revisar antes de publicar eventos/cards.                   | Transcrição, saída e diff.                   |
+| Relatórios de status e síntese executiva | Projeto: produzir relatos de sprint/projeto/portfólio para públicos técnico, gestor e diretoria.                                          | Os três relatos preservam os mesmos fatos e fontes, sem progresso inventado.               | Dados de entrada e relatórios revisados.     |
+| Governança, conformidade e qualidade     | Projeto: verificar rastreabilidade, versões, IDs, evidências e documentação de qualidade com Rust/TypeScript.                             | Detectar inconsistências de fixtures e não marcar evidência esperada como realizada.       | Auditoria e verificador quando implementado. |
+| Automação de plataformas de gestão       | Exercício: comparar Jira/Asana/Trello/Notion/Slack e integrar uma opção autorizada; bots para cards, NL→workflow, lembretes e aprovações. | Dry-run, autorização, idempotência e revisão antes de efeitos externos; mock identificado. | Payloads, testes e demonstração.             |
+| Portfólio de iniciativas e OKRs          | Exercício: relacionar iniciativas a outcomes, metas e resultados-chave; simular repriorização baseada em impacto.                         | Distinguir output de outcome e justificar ajustes com dados.                               | Mapa de objetivos e cenários.                |
+
+## Encerramento de tarefas e atualização do roadmap
+
+Uma tarefa só muda para concluída quando seus critérios tiverem evidência real. Registrar data, revisão do código, comandos/versões, dados e seeds quando aplicáveis, métricas, custo/recursos e limites. Um mesmo artefato pode comprovar vários assuntos se os resultados atenderem aos critérios de cada um; a conclusão não se propaga automaticamente.
+
+Atualizar o [plano de estudo e matriz de cobertura](docs/ia-study-plan.md) quando houver evidência técnica e o [registro de decisões](docs/decisions.md) quando o comportamento aprovado mudar. Manter os títulos e descrições das fases legíveis por assunto. Novos detalhes de implementação entram em tarefas próprias com dependências, sucesso, falhas e autorização descritos.
+
+Na próxima entrega, conferir a base operacional e construir/avaliar o protótipo da primeira demonstração. A publicação assistida, a compra de teste e a entrega continuam seguindo a ordem aprovada dos marcos.
