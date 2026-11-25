@@ -1,6 +1,6 @@
 # Smart Atelier
 
-Smart Atelier is a craft marketplace project for learning and portfolio work. The repository currently contains initialized frontend and backend projects; marketplace features have not been implemented.
+Smart Atelier is a modular integrative project for building a complete craft marketplace while studying software engineering and applied AI. The repository currently contains initialized frontend and backend projects; marketplace features have not been implemented.
 
 ## Project structure
 
@@ -12,33 +12,46 @@ Smart Atelier is a craft marketplace project for learning and portfolio work. Th
 - `docs/decisions.md`: confirmed product decisions, first-demo scope, proposals, and open tasks.
 - `docs/architecture.md`: current technical state and approved initial architecture for the demonstration.
 - `docs/rules/`: project, Rust, and Svelte development rules.
-- `docs/ia-study-plan.md`: technical learning coverage mapped to Rust and Svelte.
+- `docs/ia-study-plan.md`: topic coverage across 11 technical areas, with tasks, prerequisites, acceptance criteria, evidence, and learning status mapped to Rust and Svelte/SvelteKit.
 
 Read [AGENTS.md](AGENTS.md) and the relevant [development rules](docs/rules/README.md) before making changes. All source code, identifiers, comments, tests, configuration examples, and user-facing application content must be in English. Project documentation may remain in its current language.
 
+## Delivery and study specifications
+
+| Document                                       | Purpose                                                                                                                 |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| [Construction roadmap](ROADMAP.md)             | Delivery phases, dependencies, milestones, and completion gates.                                                        |
+| [Product decisions](docs/decisions.md)         | Confirmed rules, first-demo boundaries, proposals, and open product questions.                                          |
+| [Architecture](docs/architecture.md)           | Implemented foundation, approved technical boundaries, and contracts to refine.                                         |
+| [Applied AI study plan](docs/ia-study-plan.md) | All learning topics, classified as project work, separate exercise, or theory, with measurable completion and evidence. |
+
+The study plan covers foundations and LLMs, generative APIs and multimodality, MCP, autonomous agents, UX/UI, DevOps, project management, AI architecture, datasets and fine-tuning, security/governance, and integrative delivery. The first marketplace demo, the complete application, and full learning coverage have separate completion criteria. Career and interview preparation are excluded.
+
+Experiments use isolated labs when the topic does not belong in the marketplace. Named tools are study or comparison targets unless marked as approved/implemented in the architecture. Tool comparisons, simulated services, actual integrations, and trained models require distinct evidence. No extra runtime, cloud service, or paid experiment is installed or provisioned by this documentation.
+
 ## Tools and technologies
 
-| Area | Technology | Current use |
-| --- | --- | --- |
-| Tool version management | [mise](https://mise.jdx.dev/) | Reads the root `mise.toml`, which pins Bun 1.4.4 and Rust 1.99.1 with Cargo, rustfmt, and Clippy. |
-| Frontend runtime and package manager | [Bun](https://bun.sh/) | Install dependencies and run frontend scripts; `frontend/bun.lock` is the Bun lockfile. |
-| Frontend | Svelte 5, TypeScript, SvelteKit 3, Vite 8 | Routing and rendering framework; no marketplace workflows yet. |
-| Frontend adapter | `@sveltejs/adapter-auto` | Temporary deployment adapter while hosting remains undecided. |
-| UI components | shadcn-svelte, Bits UI, Tailwind CSS 4, Lucide | shadcn-svelte configuration and reusable UI dependencies are present. |
-| Frontend toolchain | [Vite+](https://viteplus.dev/) 1.5.1 | Vite/Rolldown, Oxlint, Oxfmt, and Vitest; configured from `frontend/vite.config.ts`. |
-| Frontend Svelte checks | `svelte-check`, TypeScript | Validates Svelte components and TypeScript; included in `bun run check`. |
-| Frontend tests | Vitest 5.1.0, Svelte Testing Library, jsdom | Unit and component testing; a Counter interaction test demonstrates the setup. |
-| Backend | Rust 2024, Axum, Tokio | HTTP API bootstrap with `/health/live` and `/health/ready`; no marketplace features. |
-| Security scanning | Not configured | Semgrep is a candidate for SAST across Rust and TypeScript; `cargo-audit` is a candidate for Rust dependency advisory checks. Neither is installed or configured. |
-| Demo HTTP API | Axum + Tokio | Implemented API foundation and health endpoints; marketplace routes remain pending. |
-| Demo persistence | PostgreSQL + SQLx | Connection pool and readiness check implemented; PostgreSQL remains authoritative for domain state. Schema and migrations are pending. |
-| Demo background work | Redis | Connection and readiness check implemented. Queue and retry scheduling remain pending; Redis does not replace PostgreSQL. |
-| Demo authentication | Application-owned accounts + Google (planned) | Both login methods resolve to one internal Smart Atelier account; roles and shops remain app-owned. |
-| Demo payments | Stripe Checkout + Stripe Connect (test mode) | Hosted card checkout in BRL; after delivery, separate charges and transfers move 100% of the item amount to the artisan's Connect balance. Bank payout follows the account schedule. Production payment model remains open. |
-| Demo shipping tracking | Ship24 (free API/webhook tier) | Up to 10 shipments per month with no overage; tracking stops at the cap. Correios is the minimum carrier to validate before integration. |
-| Demo AI | Ollama (local) | Approved local multimodal model runtime behind a replaceable provider interface; not integrated yet. Seller approval is required before publishing generated text. |
-| Demo media storage | Local filesystem (planned) | Stored outside PostgreSQL behind a replaceable storage interface. |
-| Demo webhooks | Temporary HTTPS tunnel (planned) | Exposes local webhook endpoints during development/demonstration; permanent hosting remains undecided. |
+| Area                                 | Technology                                     | Current use                                                                                                                                                                                                                 |
+| ------------------------------------ | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tool version management              | [mise](https://mise.jdx.dev/)                  | Reads the root `mise.toml`, which pins Bun 1.4.4 and Rust 1.99.1 with Cargo, rustfmt, and Clippy.                                                                                                                           |
+| Frontend runtime and package manager | [Bun](https://bun.sh/)                         | Install dependencies and run frontend scripts; `frontend/bun.lock` is the Bun lockfile.                                                                                                                                     |
+| Frontend                             | Svelte 5, TypeScript, SvelteKit 3, Vite 8      | Routing and rendering framework; no marketplace workflows yet.                                                                                                                                                              |
+| Frontend adapter                     | `@sveltejs/adapter-auto`                       | Temporary deployment adapter while hosting remains undecided.                                                                                                                                                               |
+| UI components                        | shadcn-svelte, Bits UI, Tailwind CSS 4, Lucide | shadcn-svelte configuration and reusable UI dependencies are present.                                                                                                                                                       |
+| Frontend toolchain                   | [Vite+](https://viteplus.dev/) 1.5.1           | Vite/Rolldown, Oxlint, Oxfmt, and Vitest; configured from `frontend/vite.config.ts`.                                                                                                                                        |
+| Frontend Svelte checks               | `svelte-check`, TypeScript                     | Validates Svelte components and TypeScript; included in `bun run check`.                                                                                                                                                    |
+| Frontend tests                       | Vitest 5.1.0, Svelte Testing Library, jsdom    | Unit and component testing; a Counter interaction test demonstrates the setup.                                                                                                                                              |
+| Backend                              | Rust 2024, Axum, Tokio                         | HTTP API bootstrap with `/health/live` and `/health/ready`; no marketplace features.                                                                                                                                        |
+| Security scanning                    | Not configured                                 | Semgrep is a candidate for SAST across Rust and TypeScript; `cargo-audit` is a candidate for Rust dependency advisory checks. Neither is installed or configured.                                                           |
+| Demo HTTP API                        | Axum + Tokio                                   | Implemented API foundation and health endpoints; marketplace routes remain pending.                                                                                                                                         |
+| Demo persistence                     | PostgreSQL + SQLx                              | Connection pool and readiness check implemented; PostgreSQL remains authoritative for domain state. Schema and migrations are pending.                                                                                      |
+| Demo background work                 | Redis                                          | Connection and readiness check implemented. Queue and retry scheduling remain pending; Redis does not replace PostgreSQL.                                                                                                   |
+| Demo authentication                  | Application-owned accounts + Google (planned)  | Both login methods resolve to one internal Smart Atelier account; roles and shops remain app-owned.                                                                                                                         |
+| Demo payments                        | Stripe Checkout + Stripe Connect (test mode)   | Hosted card checkout in BRL; after delivery, separate charges and transfers move 100% of the item amount to the artisan's Connect balance. Bank payout follows the account schedule. Production payment model remains open. |
+| Demo shipping tracking               | Ship24 (free API/webhook tier)                 | Up to 10 shipments per month with no overage; tracking stops at the cap. Correios is the minimum carrier to validate before integration.                                                                                    |
+| Demo AI                              | Ollama (local)                                 | Approved local multimodal model runtime behind a replaceable provider interface; not integrated yet. Seller approval is required before publishing generated text.                                                          |
+| Demo media storage                   | Local filesystem (planned)                     | Stored outside PostgreSQL behind a replaceable storage interface.                                                                                                                                                           |
+| Demo webhooks                        | Temporary HTTPS tunnel (planned)               | Exposes local webhook endpoints during development/demonstration; permanent hosting remains undecided.                                                                                                                      |
 
 Choices marked planned describe the first demonstration architecture and are not implemented product capabilities. Production hosting and payment rules remain undecided.
 
