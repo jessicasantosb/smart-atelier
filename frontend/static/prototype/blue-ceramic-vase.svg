@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Hand-thrown blue ceramic vase</title>
+  <desc id="desc">A sculptural blue ceramic vase against a quiet mineral backdrop.</desc>
+  <defs>
+    <linearGradient id="vase" x1=".2" y1="0" x2=".8" y2="1"><stop stop-color="#8caeb2"/><stop offset=".5" stop-color="#426e79"/><stop offset="1" stop-color="#1f414d"/></linearGradient>
+    <linearGradient id="ground" x2="0" y2="1"><stop stop-color="#e6ebe7"/><stop offset="1" stop-color="#d4ddd8"/></linearGradient>
+    <filter id="shadow" x="-.3" y="-.3" width="1.6" height="1.8"><feGaussianBlur stdDeviation="20"/></filter>
+  </defs>
+  <rect width="900" height="1000" fill="url(#ground)"/>
+  <circle cx="690" cy="205" r="130" fill="#f7f8f4" opacity=".56"/>
+  <path d="M0 744c186-56 322-16 466-4 177 15 274-35 434-69v329H0z" fill="#ccd7d0"/>
+  <ellipse cx="456" cy="818" rx="194" ry="35" fill="#20353a" opacity=".22" filter="url(#shadow)"/>
+  <path d="M390 267c3 66 12 108-44 180-59 77-74 143-65 245 8 98 70 164 178 164s170-66 178-164c9-102-6-168-65-245-56-72-47-114-44-180z" fill="url(#vase)"/>
+  <ellipse cx="479" cy="267" rx="89" ry="20" fill="#244b56"/>
+  <ellipse cx="479" cy="269" rx="65" ry="10" fill="#172f37"/>
+  <path d="M326 608c74 32 215 37 292-2" fill="none" stroke="#a8c2bf" stroke-linecap="round" stroke-width="8" opacity=".48"/>
+  <path d="M342 666c65 23 177 26 268-2" fill="none" stroke="#a8c2bf" stroke-linecap="round" stroke-width="5" opacity=".28"/>
+  <path d="M415 315c-10 52-36 88-67 130" fill="none" stroke="#c3d3cd" stroke-linecap="round" stroke-width="9" opacity=".36"/>
+</svg>
