@@ -6,13 +6,20 @@ Smart Atelier is a craft marketplace project for learning and portfolio work, wi
 
 Rust is used for the backend and Svelte for the frontend. `mise.toml` pins Bun 1.4.4 and Rust 1.99.1; the Rust default profile includes Cargo, rustfmt, and Clippy. `frontend/` uses Svelte 5, TypeScript, SvelteKit 3, and Vite+ 1.5.1. SvelteKit provides routing and rendering; business rules and authoritative data belong to the Rust API. `adapter-auto` remains while permanent hosting is undecided. `backend/` has an Axum/Tokio HTTP API, SQLx PostgreSQL pool, Redis connection, tracing, CORS, and liveness/readiness endpoints. The frontend home currently displays API connectivity only. No marketplace behavior, domain schema, migrations, or background queue has been implemented. `compose.yaml` provides local PostgreSQL and Redis. The approved demo architecture also includes Stripe Connect in test mode, Ship24 subject to validating Brazilian carrier coverage and free-plan limits, local Ollama for multimodal AI, local filesystem storage behind an interface, and a temporary HTTPS tunnel for external webhooks. Those integrations remain unimplemented. Production providers and hosting remain open. See `docs/architecture.md` and the detailed boundaries in `docs/decisions.md`. `docs/database.md` does not exist yet.
 
-The [AI learning plan](docs/ia-study-plan.md) covers 11 technical areas adapted to Svelte and Rust. Preserve its MC identifiers and distinguish product work, labs, and theory. Expected evidence does not mean a task is complete; the plan does not authorize running every experiment or incurring costs.
+The [AI learning plan](docs/ia-study-plan.md) covers all topics in 11 technical areas through project work, separate labs, and theory adapted to Svelte/SvelteKit and Rust. Preserve existing MC identifiers. For every study task, identify the topic, prerequisites, modality, observable acceptance criteria, and real evidence. All subtopics in a grouped row must be accounted for before completion. Track theoretical comparison, simulation, real integration, and actual training separately; expected evidence is not a completed result. New product features, paid experiments, external writes, and private-data sharing still require authorization appropriate to the action.
 
 ## Language requirements
 
 - Write all source code, identifiers, comments, tests, configuration examples, and application content in English.
 - Keep all user-facing application text in English. Do not add Portuguese UI translations unless the user changes this requirement.
 - Existing product and planning documents may remain in their current language unless the user asks to translate them.
+
+## Branch naming
+
+- Name branches with `<type>/<short-kebab-case-description>`.
+- Use `feat/` for a new capability, `fix/` for a bug fix, and `refactor/` for a code restructuring that does not change behavior.
+- For other work, use an accurate prefix such as `docs/`, `test/`, `chore/`, `build/`, `ci/`, `perf/`, or `style/`.
+- Keep branch names lowercase, concise, and descriptive; for example, `feat/hosted-checkout`, `refactor/order-workflow`, and `fix/stock-reservation`.
 
 ## Required practices
 
@@ -24,6 +31,16 @@ The [AI learning plan](docs/ia-study-plan.md) covers 11 technical areas adapted 
 - In the frontend, prefer existing reusable components and extract reusable UI when appropriate. If a needed UI component is not available in the project, add it from shadcn-svelte using Bun (`bun x shadcn-svelte@latest add <component>`). Initialize shadcn-svelte first with `bun x shadcn-svelte@latest init` when `components.json` is missing.
 - Keep secrets on the server.
 - Do not turn AI suggestions, benchmarks, or reference-platform features into approved requirements. Record decision changes and completion evidence.
+
+## Specification and learning workflow
+
+- Read [ROADMAP.md](ROADMAP.md) for delivery phases, [docs/decisions.md](docs/decisions.md) for product decisions, [docs/architecture.md](docs/architecture.md) for technical boundaries, and the learning plan for topic-level tasks and evidence. Update each document in its own role.
+- Keep roadmap phases and cross-references descriptive. Use MC identifiers for learning traceability and D/T identifiers for decisions/planning without replacing meaningful titles.
+- Preserve the approved first-demo scope and the modular monolith. Cover other learning topics in isolated labs or theory; do not turn every technique into a marketplace feature.
+- Use `labs/<descriptive-topic>/` when starting separate exercises. Keep their dependencies, data, and specialized runners isolated. Implement application behavior in Rust/Svelte; document any SDK-specific runtime used by a lab.
+- Plan all listed topics, including neural network training, remote APIs, multimodal processing, RAG, MCP, single/multiagent patterns, UX/UI, DevOps, project management, architecture, fine-tuning, and governance. A tool comparison alone cannot complete a practical requirement.
+- Before a model experiment, define the authorized dataset, baseline, metrics, resource budget, failure behavior, and evidence. Log versions and limitations; never claim a benchmark, deployment, external integration, or model training that was not executed.
+- Track three completion gates independently: the first integrated demo, the full application, and complete learning coverage. Preserve the career/interview exclusion.
 
 ## Integration safeguards
 

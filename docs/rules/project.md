@@ -3,7 +3,7 @@
 ## Escopo confirmado
 
 - A fonte de decisões de produto e arquitetura aprovada é [docs/decisions.md](../decisions.md). Preserve os IDs D01–D17 e diferencie confirmação, proposta e pendência.
-- Toda pessoa começa como compradora; criar loja habilita a atuação como vendedora. A continuidade das compras e a quantidade de lojas por conta ainda precisam ser definidas.
+- Toda pessoa começa como compradora; criar loja habilita a atuação como vendedora. A mesma conta pode comprar e vender no recorte aprovado; a quantidade de lojas por conta e regras completas de papéis ainda precisam ser definidas.
 - Um trabalho pode existir sem estar à venda. Não confunda cadastro, visibilidade, estoque e disponibilidade; seus detalhes ainda estão em discussão.
 - Preserve pedidos internos, negociação de orçamento e chat humano. Assistência de IA é adicional e depende de escopo aprovado.
 - Preserve as decisões confirmadas em `docs/decisions.md`, incluindo a demonstração de teste definida em T02. Modelo de produção, disputas e decisões explicitamente pendentes continuam em aberto.
@@ -31,10 +31,17 @@
 
 ## Tarefas e evidências
 
-- Use a [plano de conteúdos de IA](../ia-study-plan.md) como rastreabilidade das áreas técnicas. Preserve IDs MC e atualize estado com evidência real. Carreira está excluída pela D16; exercícios não viram requisitos do marketplace automaticamente.
+- Use o [plano de estudo de IA aplicada](../ia-study-plan.md) como rastreabilidade das áreas técnicas. Preserve IDs MC e atualize estado com evidência real. Carreira está excluída pela D16; exercícios não viram requisitos do marketplace automaticamente.
 
 - Descreva objetivo, escopo, decisão relacionada, dependências, critérios de aceite e evidências de validação.
 - Separe tarefas de definição das de implementação. Não marque planejamento como funcionalidade entregue.
 - Para portfólio, registre como reproduzir a demonstração e as métricas relevantes. Não apresente simulação como operação real.
 - Teste comportamento observável, invariantes, permissões e falhas relevantes. Evite testes que apenas repitam detalhes internos.
 
+## Especificações e cobertura de aprendizado
+
+- Mantenha decisões em `docs/decisions.md`, fases no `ROADMAP.md`, limites técnicos em `docs/architecture.md` e assuntos/evidências em `docs/ia-study-plan.md`. Corrija divergências sem promover proposta a decisão ou planejamento a implementação.
+- O plano cobre todos os assuntos das 11 áreas técnicas. Decomponha linhas agrupadas em subcritérios; conclua somente com evidência para cada um. Comparações de ferramentas, mocks, integração real e treinamento real precisam de registros distintos.
+- Use títulos descritivos no roadmap e IDs estáveis na matriz de estudo. Diferencie entrega da demonstração, aplicação completa e encerramento do aprendizado.
+- Crie laboratórios isolados conforme forem iniciados. Dependências/hardware de treino, cloud, clusters, bots e SDKs de referência não entram no produto automaticamente. Não remova um tópico por falta de recurso: registre a pendência prática e sua condição de execução.
+- Defina dados, baseline, métricas, orçamento e falhas antes de experimentar IA. Evidências incluem versão, comandos, resultados e limitações; não crie links para resultados inexistentes.
