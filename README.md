@@ -1,13 +1,13 @@
 # Smart Atelier
 
-Smart Atelier is a craft marketplace project for learning and portfolio work. The frontend includes a navigable prototype of the maker and buyer journeys using local sample data. It does not create accounts, publish products, process payments, track shipments, or initiate transfers. The Rust backend remains an initialized binary without an HTTP server.
+Smart Atelier is a craft marketplace project for learning and portfolio work. The frontend includes a navigable prototype of the maker and buyer journeys using local sample data. It does not create accounts, publish products, process payments, track shipments, or initiate transfers. The Rust backend provides an Axum API with liveness and readiness endpoints; marketplace behavior remains unimplemented.
 
 ## Project structure
 
 - `frontend/`: Svelte 5, TypeScript, SvelteKit 3, and Vite+ 1.5.1 application; homepage reports API liveness.
 - `backend/`: Rust 2024 API using Axum/Tokio, SQLx/PostgreSQL, and Redis; only health endpoints exist.
 - `database/`: reserved; PostgreSQL is approved, but domain schema and migrations are not defined.
-- `compose.yaml`: local PostgreSQL and Redis services for development.
+- `compose.yaml`: local PostgreSQL, Redis, and Rust API services for development.
 - `.github/workflows/ci.yml`: backend and frontend CI checks.
 - `docs/decisions.md`: confirmed product decisions, first-demo scope, proposals, and open tasks.
 - `docs/architecture.md`: current technical state and approved initial architecture for the demonstration.
@@ -69,23 +69,17 @@ To run frontend commands through mise, from the repository root:
 mise exec -- bun --cwd frontend install --frozen-lockfile
 ```
 
-Start local PostgreSQL and Redis from the repository root (Docker Compose required):
+Run the backend and its PostgreSQL/Redis dependencies in Linux containers from the repository root. Docker Desktop must be installed and running:
 
 ```sh
-docker compose up -d
+docker compose up --build backend
 ```
 
-In PowerShell, create the backend environment file and start the API:
+Compose waits for PostgreSQL and Redis healthchecks, builds the Rust development image, and serves the API at `http://localhost:3000`. Follow backend logs with `docker compose logs -f backend`; stop the stack with `docker compose down` (the PostgreSQL volume is preserved). The backend source is bind-mounted, and Cargo build output is kept in a named volume.
 
-```powershell
-Copy-Item backend/.env.example backend/.env
-Set-Location backend
-mise exec -- cargo run
-```
+In another terminal, start the frontend from `frontend/` with `mise exec -- bun run dev`. Its default API URL is `http://localhost:3000`.
 
-In another terminal, start the frontend from `frontend/` with `mise exec -- bun run dev`. Set `VITE_API_BASE_URL` in `frontend/.env` only if the API is running at a different address. `backend/.env` is ignored by Git.
-
-Alternatively, change into `frontend/` and run `mise exec -- bun install --frozen-lockfile` followed by `mise exec -- bun run dev`.
+To run Rust natively instead, start PostgreSQL and Redis with `docker compose up -d postgres redis`, copy `backend/.env.example` to `backend/.env`, then run `mise exec -- cargo run` from `backend/`. This native option uses the Windows Rust linker/toolchain.
 
 ## Frontend commands
 
