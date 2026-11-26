@@ -2,22 +2,22 @@
 
 **Estado:** aprovada pela usuária em 12/11/2026.
 
-**Implementação:** protótipo navegável disponível nas rotas públicas e de demonstração. A fase permanece em revisão até a usuária percorrer as jornadas e confirmar clareza, responsividade e acessibilidade.
+**Implementação:** protótipo navegável em SolidJS com Solid Router, disponível nas rotas públicas e de demonstração. A fase permanece em revisão até a usuária percorrer as jornadas e confirmar clareza, responsividade e acessibilidade.
 
 ### Rotas implementadas
 
 - `/` — entrada pública com links para a peça de exemplo e para o espaço do artesão.
 - `/atelier` e `/atelier/pecas/nova` — área do artesão e editor com rascunho de IA simulado.
-- `/loja/[slug]` e `/produto/[slug]` — loja e peça públicas; slugs inválidos usam a página de erro do SvelteKit.
+- `/loja/:slug` e `/produto/:slug` — loja e peça públicas. Slugs inválidos mostram a página de não encontrado.
 - `/checkout/entrar`, `/checkout/endereco` e `/checkout/pagamento` — entrada visual, formulário de endereço e prévia de checkout hospedado.
-- `/pedidos/[id]` — linha do tempo ilustrativa do pedido pago, entregue e com transferência de teste iniciada.
-- `+error.svelte` — estado sem saída para rota ou registro inexistente, com retorno à entrada pública.
+- `/pedidos/:id` — linha do tempo ilustrativa do pedido pago, entregue e com transferência de teste iniciada.
+- Rotas ou registros inexistentes mostram uma página com link de retorno à entrada pública.
 
 Todas as ações usam fixtures locais. Nenhum cadastro, alteração de produto, endereço, pagamento, rastreamento ou repasse é persistido ou enviado a provedores externos.
 
 ## Objetivo
 
-Criar um protótipo navegável em Svelte para avaliar as jornadas da demonstração antes de implementar regras de negócio. O protótipo usará conteúdo e estados simulados, sem autenticação, persistência, Stripe, Ship24 ou chamadas de IA reais.
+Criar um protótipo navegável em SolidJS para avaliar as jornadas da demonstração antes de implementar regras de negócio. O protótipo usará conteúdo e estados simulados, sem autenticação, persistência, Stripe, Ship24 ou chamadas de IA reais.
 
 ## Pessoas e jornada
 
@@ -55,7 +55,7 @@ As telas poderão ser percorridas por links e ações locais com dados demonstra
 - **Tipografia:** Inter Variable já instalada no projeto. Pesos 400/500 para leitura e controles; 600/700 para hierarquia. Uma família mantém a interface funcional e deixa as peças trazerem sua própria personalidade.
 - **Alinhamento e estrutura:** navegação consistente no topo; conteúdo alinhado à esquerda. Na página da peça, usar grade assimétrica com imagem dominante e painel de compra adjacente; no celular, imagem, informação e ação em coluna.
 - **Princípios:** imagens grandes em vez de cartões repetidos; poucas divisórias; ações com rótulos que descrevem o resultado; controles próximos dos dados que alteram. Evitar estética de dashboard SaaS genérico.
-- **Tailwind e componentes:** classes utilitárias Tailwind para layout, espaçamento e estados; reutilizar Button e componentes shadcn-svelte quando trouxerem comportamento/acessibilidade útil. Não criar blocos extensos de CSS por página.
+- **Tailwind e componentes:** classes utilitárias Tailwind para layout, espaçamento e estados; reutilizar `Button` e componentes Solid compatíveis com a versão do projeto. Não criar blocos extensos de CSS por página.
 
 ### Esboço — página pública do produto
 

@@ -23,7 +23,7 @@ jobs:
       - run: cargo clippy --all-targets --locked -- -D warnings
 
   frontend:
-    name: Svelte frontend
+    name: Solid frontend
     runs-on: ubuntu-latest
     defaults:
       run:

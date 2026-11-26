@@ -8,6 +8,6 @@ O `AGENTS.md` define as regras gerais e o idioma obrigatório para código e int
 | --- | --- |
 | [Projeto e domínio](project.md) | Qualquer mudança de escopo, contrato, dados, segurança ou documentação. |
 | [Rust](rust.md) | Implementação, revisão e testes do backend. |
-| [Svelte](svelte.md) | Implementação, revisão e testes do frontend. |
+| [SolidJS](solid.md) | Implementação, revisão e testes do frontend. |
 
 Mantenha regras específicas aqui e o ponto de entrada no AGENTS.md. Atualize decisões somente após confirmação; registre decisões arquiteturais relevantes com contexto, alternativas e consequências quando forem tomadas.

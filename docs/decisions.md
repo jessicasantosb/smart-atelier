@@ -1,18 +1,19 @@
 # Registro de decisões — aplicação de artesanato
 
-Última atualização: 16/11/2026.
+Última atualização: 26/11/2026.
 
 Este arquivo acompanha o planejamento da aplicação. As decisões confirmadas estão separadas das propostas e das questões em aberto. Será atualizado conforme a conversa avançar. Ainda não é a especificação final do projeto nem um plano de implementação aprovado.
 
 ## Como ler este registro
 
-- **Confirmado:** decisões D01–D17 e definições aprovadas nas tarefas T01, T02 e T08, nos limites descritos abaixo.
+- **Confirmado:** decisões D01–D16 e D18 e definições aprovadas nas tarefas T01, T02 e T08, nos limites descritos abaixo.
+- **Histórico:** decisões substituídas, como D17, descrevem o contexto anterior.
 - **Proposta:** alternativa para discussão, sem autorização de implementação.
 - **Em aberto:** definição necessária antes da entrega correspondente.
 - **Pesquisa:** referência histórica com data e fonte; não equivale a decisão.
 - **Tarefa de planejamento:** trabalho para esclarecer escopo e critérios, sem funcionalidade entregue.
 
-**Estado atual:** fase 0 concluída no planejamento e fase 1 concluída na base técnica. A API Axum/Tokio, conexões PostgreSQL/Redis, verificações de saúde, conectividade inicial do frontend, configuração de desenvolvimento e CI estão implementadas; as verificações locais de Rust e frontend passaram. O uso do Compose com serviços ativos e uma execução remota do GitHub Actions ainda não foram validados neste ambiente. Ainda não há funcionalidades de domínio, schema de negócio ou fila assíncrona. T01, T02 e T08 estão definidos; operações e entidades candidatas estão registradas em `docs/architecture.md`. O projeto é um integrador modular para construir a aplicação completa. A prioridade aprovada está no [roadmap](../ROADMAP.md). A demonstração percorre o caminho de uma peça pronta, do cadastro à venda e entrega. Além da base acima, a arquitetura definida prevê Stripe em modo de teste, Ship24 no plano grátis de 10 rastreamentos mensais (Correios é a cobertura mínima a validar), Ollama local, armazenamento local de imagens e túnel HTTPS temporário para webhooks. Hospedagem e provedores de produção continuam em aberto.
+**Estado atual:** fase 0 concluída no planejamento e fase 1 concluída na base técnica. A API Axum/Tokio, conexões PostgreSQL/Redis, verificações de saúde, conectividade inicial do frontend, configuração de desenvolvimento e CI estão implementadas. O protótipo da Fase 2 usa SolidJS e dados simulados e permanece em revisão. O histórico registra as verificações locais de Rust e frontend na Fase 1. O uso do Compose com serviços ativos e uma execução remota do GitHub Actions ainda não foram validados neste ambiente. Ainda não há funcionalidades de domínio, schema de negócio ou fila assíncrona. T01, T02 e T08 estão definidos; operações e entidades candidatas estão registradas em `docs/architecture.md`. O projeto é um integrador modular para construir a aplicação completa. A prioridade aprovada está no [roadmap](../ROADMAP.md). A demonstração percorre o caminho de uma peça pronta, do cadastro à venda e entrega. Além da base acima, a arquitetura definida prevê Stripe em modo de teste, Ship24 no plano grátis de 10 rastreamentos mensais (Correios é a cobertura mínima a validar), Ollama local, armazenamento local de imagens e túnel HTTPS temporário para webhooks. Hospedagem e provedores de produção continuam em aberto.
 
 ### Navegação
 
@@ -103,15 +104,19 @@ O projeto será voltado a aprendizado e construção de portfólio. Operação c
 
 ### D15 — Plano de aprendizado técnico
 
-O aprendizado técnico usa Svelte/SvelteKit no frontend e Rust no backend. O plano de estudo cobre integralmente as 11 áreas técnicas por aplicação no projeto, exercícios separados e estudo teórico. Cada assunto exige tarefa, critério de conclusão e evidência; uma comparação não substitui a execução prática prevista. Laboratórios não se tornam funcionalidades obrigatórias do marketplace.
+O aprendizado técnico usa SolidJS no frontend e Rust no backend. O plano de estudo cobre integralmente as 11 áreas técnicas por aplicação no projeto, exercícios separados e estudo teórico. Cada assunto exige tarefa, critério de conclusão e evidência; uma comparação não substitui a execução prática prevista. Laboratórios não se tornam funcionalidades obrigatórias do marketplace.
 
 ### D16 — Escopo do aprendizado
 
 O plano não inclui atividades de carreira e entrevistas. Documentação, demonstração e avaliação técnica do projeto integrador fazem parte do trabalho; OKRs permanecem como assunto de gestão do projeto.
 
-### D17 — Framework do frontend
+### D17 — Adoção inicial do SvelteKit
 
-O frontend usará SvelteKit 3 sobre Svelte 5 e TypeScript. SvelteKit será responsável por rotas, carregamento e renderização da aplicação. Regras de negócio e dados autoritativos permanecem no backend Rust. `adapter-auto` fica configurado até a hospedagem ser definida.
+**Histórico.** SvelteKit 3 sobre Svelte 5 e TypeScript foi escolhido em 11/11/2026. A decisão foi substituída por D18.
+
+### D18 — Migração do frontend para SolidJS
+
+**Confirmada em 26/11/2026.** O frontend passa a usar SolidJS 2.0.4, a versão estável selecionada para a migração, com TypeScript/TSX e Solid Router. A aplicação roda no navegador e gera um build estático com Vite+. O destino de hospedagem continua em aberto. As jornadas simuladas, a identidade visual e os endereços públicos do protótipo foram mantidos como requisitos da migração. O frontend chama a API Rust por HTTP/JSON. Autorização, regras de negócio e dados autoritativos continuam no backend.
 
 ## Tarefas de planejamento
 
@@ -165,7 +170,7 @@ Organização do planejamento. As definições de T01, T02 e T08 estão confirma
 ### T08 — Arquitetura inicial para a demonstração
 
 - **Estado:** arquitetura inicial aprovada; funcionalidades e contratos detalhados ainda não implementados.
-- **Forma:** monólito modular; frontend SvelteKit comunica-se por HTTP/JSON com API Rust. O Rust é a autoridade para regras de negócio, autorização, pedidos, pagamento e integração. Não introduzir microserviços na demonstração.
+- **Forma:** monólito modular; frontend SolidJS comunica-se por HTTP/JSON com API Rust. O Rust é a autoridade para regras de negócio, autorização, pedidos, pagamento e integração. Não introduzir microserviços na demonstração.
 - **Backend e dados:** Axum + Tokio para HTTP assíncrono; PostgreSQL + SQLx para persistência; Redis para filas e retries de tarefas assíncronas. PostgreSQL mantém o estado autoritativo e o registro/idempotência dos eventos; Redis agenda processamento, não substitui a persistência do domínio.
 - **Integrações do demo:** Stripe/Connect em modo de teste com checkout hospedado, cartão e BRL; _separate charges and transfers_ para transferir o valor ao saldo Connect após entrega; Ship24 sujeito à verificação de cobertura e plano gratuito; Ollama local para texto+imagem; armazenamento de imagens no filesystem local por interface substituível.
 - **Identidade:** login próprio da aplicação e login por Google coexistem e resolvem para a mesma conta interna. O Connect onboarding é obrigatório antes de publicar item para venda. Papéis e lojas pertencem ao Smart Atelier.
@@ -315,6 +320,8 @@ A base técnica contém a API Axum/Tokio, pool PostgreSQL/SQLx, conexão Redis, 
 - Esse prazo operacional de repasse não será tratado como prazo final para todos os direitos de reclamação, devolução ou reembolso.
 
 ## Histórico
+
+- **26/11/2026 — Migração do frontend:** a usuária solicitou a adoção da versão estável mais recente do SolidJS e a atualização da documentação. D18 substitui D17 e mantém as fronteiras do backend e o escopo do protótipo.
 
 - **16/11/2026 — Revisão das especificações e do aprendizado:** matriz reorganizada com as 11 áreas, 89 linhas estáveis, modalidades, critérios detalhados, estados e contrato de evidências. Stack alinhada às decisões já aprovadas; demonstração, aplicação completa e cobertura de estudo têm encerramentos distintos. Nenhuma funcionalidade, laboratório, integração ou treino foi implementado por esta revisão.
 

@@ -1,18 +1,18 @@
 # Smart Atelier
 
-Smart Atelier is a craft marketplace project for learning and portfolio work. The frontend includes a navigable prototype of the maker and buyer journeys using local sample data. It does not create accounts, publish products, process payments, track shipments, or initiate transfers. The Rust backend provides an Axum API with liveness and readiness endpoints; marketplace behavior remains unimplemented.
+Smart Atelier is a craft marketplace project for learning and portfolio work. The frontend includes a navigable prototype of the maker and buyer journeys using local sample data. It does not create accounts, publish products, process payments, track shipments, or initiate transfers. The Rust backend provides an Axum API with liveness and readiness endpoints.
 
 ## Project structure
 
-- `frontend/`: Svelte 5, TypeScript, SvelteKit 3, and Vite+ 1.5.1 application; homepage reports API liveness.
+- `frontend/`: SolidJS 2.0.4 and TypeScript application with Solid Router and Vite+ 1.5.1. The prototype includes a shared API status indicator.
 - `backend/`: Rust 2024 API using Axum/Tokio, SQLx/PostgreSQL, and Redis; only health endpoints exist.
 - `database/`: reserved; PostgreSQL is approved, but domain schema and migrations are not defined.
 - `compose.yaml`: local PostgreSQL, Redis, and Rust API services for development.
 - `.github/workflows/ci.yml`: backend and frontend CI checks.
 - `docs/decisions.md`: confirmed product decisions, first-demo scope, proposals, and open tasks.
 - `docs/architecture.md`: current technical state and approved initial architecture for the demonstration.
-- `docs/rules/`: project, Rust, and Svelte development rules.
-- `docs/ia-study-plan.md`: topic coverage across 11 technical areas, with tasks, prerequisites, acceptance criteria, evidence, and learning status mapped to Rust and Svelte/SvelteKit.
+- `docs/rules/`: project, Rust, and SolidJS development rules.
+- `docs/ia-study-plan.md`: topic coverage across 11 technical areas, with tasks, prerequisites, acceptance criteria, evidence, and learning status mapped to Rust and SolidJS.
 
 Read [AGENTS.md](AGENTS.md) and the relevant [development rules](docs/rules/README.md) before making changes. All source code, identifiers, comments, tests, configuration examples, and user-facing application content must be in English. Project documentation may remain in its current language.
 
@@ -33,14 +33,14 @@ Experiments use isolated labs when the topic does not belong in the marketplace.
 
 | Area                                 | Technology                                     | Current use                                                                                                                                                                                                                 |
 | ------------------------------------ | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Tool version management              | [mise](https://mise.jdx.dev/)                  | Reads the root `mise.toml`, which pins Bun 1.4.4 and Rust 1.99.1 with Cargo, rustfmt, and Clippy.                                                                                                                           |
+| Tool version management              | [mise](https://mise.jdx.dev/)                  | Reads the root `mise.toml`, which pins Bun 1.4.4, Node.js 24.22.3, and Rust 1.99.1 with Cargo, rustfmt, and Clippy.                                                                                                                           |
 | Frontend runtime and package manager | [Bun](https://bun.sh/)                         | Install dependencies and run frontend scripts; `frontend/bun.lock` is the Bun lockfile.                                                                                                                                     |
-| Frontend                             | Svelte 5, TypeScript, SvelteKit 3, Vite 8      | Routing and rendering framework; no marketplace workflows yet.                                                                                                                                                              |
-| Frontend adapter                     | `@sveltejs/adapter-auto`                       | Temporary deployment adapter while hosting remains undecided.                                                                                                                                                               |
-| UI components                        | shadcn-svelte, Bits UI, Tailwind CSS 4, Lucide | shadcn-svelte configuration and reusable UI dependencies are present.                                                                                                                                                       |
+| Frontend | SolidJS 2.0.4, TypeScript, Solid Router | Browser rendering and navigation for the prototype. |
+| Frontend build | Vite+ static SPA | Serves `frontend/dist/` with an `index.html` fallback for application routes. Hosting is undecided. |
+| UI components | Tailwind CSS 4, Inter Variable, shared Solid components | Responsive styling, typography, and reusable UI. |
 | Frontend toolchain                   | [Vite+](https://viteplus.dev/) 1.5.1           | Vite/Rolldown, Oxlint, Oxfmt, and Vitest; configured from `frontend/vite.config.ts`.                                                                                                                                        |
-| Frontend Svelte checks               | `svelte-check`, TypeScript                     | Validates Svelte components and TypeScript; included in `bun run check`.                                                                                                                                                    |
-| Frontend tests                       | Vitest 5.1.0, Svelte Testing Library, jsdom    | Unit and component testing; a Counter interaction test demonstrates the setup.                                                                                                                                              |
+| Frontend types | TypeScript | Checks TypeScript and TSX as part of `bun run check`. |
+| Frontend tests | Vitest, DOM Testing Library, jsdom | Unit and component tests cover the prototype routes and states. |
 | Backend                              | Rust 2024, Axum, Tokio                         | HTTP API bootstrap with `/health/live` and `/health/ready`; no marketplace features.                                                                                                                                        |
 | Security scanning                    | Not configured                                 | Semgrep is a candidate for SAST across Rust and TypeScript; `cargo-audit` is a candidate for Rust dependency advisory checks. Neither is installed or configured.                                                           |
 | Demo HTTP API                        | Axum + Tokio                                   | Implemented API foundation and health endpoints; marketplace routes remain pending.                                                                                                                                         |
@@ -57,7 +57,7 @@ Choices marked planned describe the first demonstration architecture and are not
 
 ## Setup
 
-Install [mise](https://mise.jdx.dev/) and then install the Bun and Rust toolchains declared by the repository:
+Install the Bun, Node.js, and Rust toolchains declared by the repository with [mise](https://mise.jdx.dev/).
 
 ```sh
 mise install
@@ -95,7 +95,7 @@ bun run test
 bun run build
 ```
 
-Use `bun run format` to apply formatting and `bun run preview` to preview a production build. Use `bun run test:watch` for interactive test development. Vite+ formats Svelte components as well as TypeScript, styles, and project configuration. See [frontend/README.md](frontend/README.md) for details.
+Use `bun run format` to apply formatting and `bun run preview` to preview a production build. Use `bun run test:watch` for interactive test development. Vite+ formats TypeScript, TSX, styles, and project configuration. See [frontend/README.md](frontend/README.md) for details.
 
 ## Backend commands
 

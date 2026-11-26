@@ -2,7 +2,7 @@
 
 ## Escopo confirmado
 
-- A fonte de decisões de produto e arquitetura aprovada é [docs/decisions.md](../decisions.md). Preserve os IDs D01–D17 e diferencie confirmação, proposta e pendência.
+- A fonte de decisões de produto e arquitetura aprovada é [docs/decisions.md](../decisions.md). Preserve os IDs D01–D18 e diferencie decisões vigentes, decisões históricas, propostas e pendências.
 - Toda pessoa começa como compradora; criar loja habilita a atuação como vendedora. A mesma conta pode comprar e vender no recorte aprovado; a quantidade de lojas por conta e regras completas de papéis ainda precisam ser definidas.
 - Um trabalho pode existir sem estar à venda. Não confunda cadastro, visibilidade, estoque e disponibilidade; seus detalhes ainda estão em discussão.
 - Preserve pedidos internos, negociação de orçamento e chat humano. Assistência de IA é adicional e depende de escopo aprovado.
