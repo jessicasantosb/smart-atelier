@@ -1,6 +1,6 @@
 # Fases para a construção completa do Smart Atelier
 
-Atualizado em 16/11/2026.
+Atualizado em 26/11/2026.
 
 O Smart Atelier é um projeto integrador modular para construir um marketplace de artesanato e estudar engenharia de software com IA aplicada. A construção da aplicação, os laboratórios independentes e o estudo teórico avançam em trilhas coordenadas. Atividades de carreira e entrevistas ficam fora do plano.
 
@@ -18,9 +18,9 @@ Este arquivo organiza a sequência, as dependências e os critérios das entrega
 
 ## Estado conhecido e três critérios de entrega
 
-As fases de escopo e de base técnica têm conclusão histórica registrada em 12/11/2026. A base técnica da pasta principal contém a API Rust, conexões PostgreSQL/Redis, health checks, a tela de conectividade do frontend e o workflow de CI. A execução com serviços do Compose e a execução remota da CI permanecem como verificações operacionais pendentes. Este documento não declara novas verificações executadas.
+As fases de escopo e de base técnica têm conclusão histórica registrada em 12/11/2026. A base técnica inclui a API Rust, conexões PostgreSQL/Redis, health checks, o indicador de conectividade do frontend e o workflow de CI. A execução com serviços do Compose e a execução remota da CI permanecem como verificações operacionais pendentes. Este documento não declara novas verificações executadas.
 
-A fase de UX continua pendente de implementação e avaliação no estado de referência da aplicação. A tela de conectividade não comprova jornadas de usuário. As demais fases estão planejadas; registrar código e evidências de cada entrega antes de alterar esse estado.
+A fase de UX tem um protótipo navegável em SolidJS para as jornadas simuladas de artesão e comprador. A revisão guiada e a validação em navegador ainda fazem parte do aceite. As demais fases estão planejadas e exigem evidências de entrega.
 
 | Entrega                                   | Critério para considerar concluída                                                                                                                                                   | Evidência necessária                                                                                                            |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -53,7 +53,7 @@ O fluxo usa _separate charges and transfers_ apenas em teste. PostgreSQL guarda 
 
 Antes de integrar o rastreamento, validar a cobertura dos Correios e as condições atuais do Ship24. O limite aceito para o demo é de até 10 rastreamentos por mês no plano gratuito, sem excedente cobrado; a cota não deve ser consumida pela CI. Se a cobertura ou gratuidade não atender ao recorte, registrar o bloqueio e rever a escolha antes de executar a integração.
 
-O primeiro ambiente é local: SvelteKit/TypeScript/Tailwind no frontend, Rust/Axum/Tokio para a API, PostgreSQL/SQLx, Redis, Ollama, imagens no filesystem por interface substituível e túnel HTTPS temporário para webhooks. Provedores e hospedagem de produção permanecem em aberto.
+O primeiro ambiente é local: SolidJS/TypeScript/Tailwind no frontend, Rust/Axum/Tokio para a API, PostgreSQL/SQLx, Redis, Ollama, imagens no filesystem por interface substituível e túnel HTTPS temporário para webhooks. Provedores e hospedagem de produção permanecem em aberto.
 
 Ficam fora da primeira demonstração: encomendas e negociação de orçamento, chat, descoberta por busca de catálogo, carrinho com múltiplos itens ou lojas, produção personalizada, cotação/cálculo de frete, emissão de etiqueta, cancelamento após pagamento, reembolso, disputa, pagamento real e lançamento comercial. Os itens aprovados para o produto completo entram depois do refinamento das regras correspondentes.
 
@@ -76,7 +76,7 @@ A ordem abaixo foi aprovada em 12/11/2026 e permanece sem datas ou estimativas d
 | --------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------- |
 | Escopo, arquitetura e plano de entrega        | Projeto integrador, primeira demonstração e prioridades registrados. | Decisões da aplicação.                                           | Concluída no planejamento, historicamente.                     |
 | Base técnica e fluxo de desenvolvimento       | Ambiente, API inicial, serviços e verificações disponíveis.          | Escopo e arquitetura inicial.                                    | Concluída historicamente; verificações operacionais pendentes. |
-| UX, protótipos e acessibilidade               | Jornadas navegáveis avaliadas.                                       | Recorte demonstrável e linguagem do domínio.                     | Pendente na pasta principal.                                   |
+| UX, protótipos e acessibilidade               | Jornadas navegáveis avaliadas.                                       | Recorte demonstrável e linguagem do domínio.                     | Protótipo em revisão.                                   |
 | Contas, autenticação e lojas                  | Identidade e permissões validadas no Rust.                           | Base técnica, UX e regras de conta/loja.                         | Planejada.                                                     |
 | Catálogo e descoberta                         | Trabalhos e páginas públicas; descoberta posterior selecionada.      | Identidade, loja, mídia e regras de publicação.                  | Planejada.                                                     |
 | Encomendas, chat e pedidos                    | Orçamento negociado, aceite, histórico e acompanhamento.             | Contas/lojas, trabalhos e regras de encomenda.                   | Planejada; expansão após a primeira demonstração.              |
@@ -113,7 +113,7 @@ A ordem abaixo foi aprovada em 12/11/2026 e permanece sem datas ou estimativas d
 
 **Aplicação e pré-requisitos:** engenharia do projeto; escopo e arquitetura inicial aprovados.
 
-**Trabalho e assuntos:** manter Svelte 5, TypeScript, SvelteKit 3, Tailwind, Vite+ e Bun; Rust/Axum/Tokio, SQLx/PostgreSQL e Redis; configuração por ambiente e segredos no servidor; health checks, documentação e CI. Estudar prompts para codar, depurar, documentar e aprender; regras de IDEs/agentes; scaffolding, revisão de código e refatoração assistida. Comparações de Cursor, VS Code, Windsurf e outros assistentes ficam como estudo, sem exigir adoção de todos.
+**Trabalho e assuntos:** manter SolidJS, TypeScript, Solid Router, Tailwind, Vite+ e Bun; Rust/Axum/Tokio, SQLx/PostgreSQL e Redis; configuração por ambiente e segredos no servidor; health checks, documentação e CI. Estudar prompts para codar, depurar, documentar e aprender; regras de IDEs/agentes; scaffolding, revisão de código e refatoração assistida. Comparações de Cursor, VS Code, Windsurf e outros assistentes ficam como estudo, sem exigir adoção de todos.
 
 **Critério de conclusão:** ambiente descrito, lockfiles versionados, API inicial e conectividade disponíveis; checks reais documentados. Verificar `/health/ready` com os serviços ativos e observar uma execução remota da CI antes de declarar esses cenários validados.
 
@@ -121,11 +121,11 @@ A ordem abaixo foi aprovada em 12/11/2026 e permanece sem datas ou estimativas d
 
 ### Fase 2 — UX, protótipos e acessibilidade
 
-**Estado:** pendente na pasta principal; a tela de conectividade não comprova as jornadas desta fase.
+**Estado:** protótipo navegável portado para SolidJS. A revisão guiada e a validação em navegador, incluindo acessibilidade e responsividade, continuam pendentes. Consulte o [design da Fase 2](docs/phase-2-ux-design.md).
 
 **Aplicação e pré-requisitos:** protótipo do projeto e exercícios de ferramentas de design; recorte da demonstração e regras de idioma. Toda interface e código permanecem em inglês.
 
-**Trabalho e assuntos:** mapear artesão e comprador, telas e estados; usar IA para pesquisa/ideação como hipótese, wireframes, mockups e text-to-UI; converter design em Svelte e revisar componentes. Comparar Figma, Firebase Studio, ferramentas de prototipação e CLI assistida em laboratório; estudar prompts HTML/CSS/TypeScript, geração de componentes e refatoração. Planejar automação E2E com agentes/MCP, distinguindo chamadas de ferramenta de interação real com a UI.
+**Trabalho e assuntos:** mapear artesão e comprador, telas e estados; usar IA para pesquisa/ideação como hipótese, wireframes, mockups e text-to-UI; converter design em SolidJS e revisar componentes. Comparar Figma, Firebase Studio, ferramentas de prototipação e CLI assistida em laboratório; estudar prompts HTML/CSS/TypeScript, geração de componentes e refatoração. Planejar automação E2E com agentes/MCP, distinguindo chamadas de ferramenta de interação real com a UI.
 
 **Critério de conclusão:** protótipo navegável das jornadas demonstrativas, estados de carregamento/erro/vazio/sucesso, rascunho explicitamente simulado, checkout sem coleta real de cartão e navegação sem telas sem saída; revisão guiada com a usuária; teclado, foco, labels, contraste e largura móvel verificados. Conteúdo gerado não conta como pesquisa com participantes.
 
@@ -243,7 +243,7 @@ A ordem abaixo foi aprovada em 12/11/2026 e permanece sem datas ou estimativas d
 
 **Estado:** planejada.
 
-**Aplicação e pré-requisitos:** exercícios Svelte/TypeScript isolados; fundamentos, dataset autorizado, separação treino/validação/teste e recursos locais.
+**Aplicação e pré-requisitos:** exercícios SolidJS/TypeScript isolados; fundamentos, dataset autorizado, separação treino/validação/teste e recursos locais.
 
 **Trabalho e assuntos:** história da máquina inteligente e evolução IA/ML/DL/LLMs; tensores, redes neurais e aprendizado; transformers, attention e embeddings; primeira rede treinada em TypeScript, sem trocar treino por API de inferência. Aplicar detecção/tracking/filtros em vídeo autorizado no browser e bot/assistente/efeito dinâmico em minijogo; estudar deep learning em cenários reais, explicabilidade e vieses.
 
@@ -257,7 +257,7 @@ A ordem abaixo foi aprovada em 12/11/2026 e permanece sem datas ou estimativas d
 
 **Aplicação e pré-requisitos:** estudo de decisão e laboratório de treinamento; baseline de prompt/RAG, procedência e autorização dos dados, modelo compatível, orçamento e hardware/runner adequados.
 
-**Trabalho e assuntos:** escolher entre prompt, RAG e fine-tuning; coleta, limpeza, diversidade, balanceamento/padronização, deduplicação e JSONL; CLI Rust para preparação e jobs; API comercial com upload, hiperparâmetros, monitoramento e cancelamento; LoRA/PEFT versus full fine-tuning, com runner especializado isolado quando necessário; versionamento, implantação e observabilidade. Comparar modelos de domínio em chatbot/agente e API Svelte/Rust de laboratório.
+**Trabalho e assuntos:** escolher entre prompt, RAG e fine-tuning; coleta, limpeza, diversidade, balanceamento/padronização, deduplicação e JSONL; CLI Rust para preparação e jobs; API comercial com upload, hiperparâmetros, monitoramento e cancelamento; LoRA/PEFT versus full fine-tuning, com runner especializado isolado quando necessário; versionamento, implantação e observabilidade. Comparar modelos de domínio em chatbot/agente e API SolidJS/Rust de laboratório.
 
 **Critério de conclusão:** dados sem vazamento entre treino/validação/teste; treino real e checkpoints/manifestos comprovados; comparação base/ajustados com precisão, consistência, adequação, performance, custo, generalização, vieses e overfitting; avaliação qualitativa cega e quantitativa. Executar A/B de laboratório com hipótese, variantes, alocação reproduzível, métrica e incerteza; dados offline/simulados não comprovam resultado com tráfego real. Falta de hardware/crédito ou suporte é pendência, não substituição silenciosa por mock.
 
@@ -322,7 +322,7 @@ A ordem abaixo foi aprovada em 12/11/2026 e permanece sem datas ou estimativas d
 
 **Aplicação e pré-requisitos:** demonstração do produto e apresentação técnica dos laboratórios; funcionalidades do recorte implementadas/validadas, ambiente escolhido e instruções reproduzíveis. A primeira demonstração local não depende de finalizar todos os laboratórios de IA.
 
-**Trabalho e assuntos:** executar/implantar o recorte no ambiente autorizado, apresentar cadastro→venda→entrega e demais jornadas selecionadas; consolidar API documentada, frontend Svelte, arquitetura e CI/CD; demonstrar separadamente CLI, RAG, agente, MCP, UI programática e modelo ajustado quando os exercícios correspondentes forem concluídos. Explicar complexidade, alternativas, resultados, custos e limites.
+**Trabalho e assuntos:** executar/implantar o recorte no ambiente autorizado, apresentar cadastro→venda→entrega e demais jornadas selecionadas; consolidar API documentada, frontend SolidJS, arquitetura e CI/CD; demonstrar separadamente CLI, RAG, agente, MCP, UI programática e modelo ajustado quando os exercícios correspondentes forem concluídos. Explicar complexidade, alternativas, resultados, custos e limites.
 
 **Critério de conclusão:** outra pessoa segue o guia e reproduz a entrega; ambiente, dados, versões, comandos, contratos e recuperação documentados; resultados conferíveis contra baseline. Avaliar separadamente a primeira demonstração, o marketplace e a cobertura técnica; qualquer pendência permanece registrada. A implantação permanente depende de decisão de hospedagem e recursos, sem ser inferida do túnel local.
 

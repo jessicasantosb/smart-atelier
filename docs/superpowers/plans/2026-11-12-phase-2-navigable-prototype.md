@@ -1,4 +1,6 @@
-# Protótipo navegável da fase 2 — plano de implementação
+# Protótipo navegável da fase 2 — plano de implementação original
+
+> **Registro histórico de 12/11/2026.** Este plano documenta a implementação original em Svelte. Os caminhos de arquivos, comandos e resultados abaixo refletem aquela etapa. A versão atual usa SolidJS. Consulte a [documentação do frontend](../../../frontend/README.md) e o [design da Fase 2](../../phase-2-ux-design.md).
 
 > **Para agentes de implementação:** SUB-SKILL OBRIGATÓRIA: use `superpowers:executing-plans` e execute as tarefas em ordem. Acompanhe cada passo com caixas de seleção.
 

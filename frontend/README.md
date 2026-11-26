@@ -1,23 +1,43 @@
 # Frontend — Smart Atelier
 
-Frontend com Svelte 5, TypeScript e SvelteKit 3, executado pelo Vite+ 1.5.1. A rota inicial mantém a tela de demonstração do template; ainda não há funcionalidades do marketplace. SvelteKit fornece roteamento, carregamento de páginas e renderização. `@sveltejs/adapter-auto` está configurado até que a hospedagem seja definida.
+O protótipo usa SolidJS 2.0.4, TypeScript com TSX, Solid Router 2.0.1 e Tailwind CSS 4. Vite+ 1.5.1 cuida do servidor de desenvolvimento, build, formatação, lint e testes. As jornadas do artesão e do comprador usam dados locais simulados. Consulte o [design da Fase 2](../docs/phase-2-ux-design.md) para os caminhos da demonstração.
 
-Use Bun 1.4.4 declarado em `mise.toml` e Node.js 22.17 ou superior, requisito mínimo do SvelteKit 3.
+## Desenvolvimento local
+
+Execute `mise install` na raiz para instalar as versões declaradas em [mise.toml](../mise.toml). O plugin do Solid e o Vite+ usam Node.js 24.22.3. Na pasta `frontend/`, use Bun 1.4.4 para instalar as dependências versionadas em `bun.lock` e iniciar o frontend.
 
 ```sh
-bun install --frozen-lockfile
-bun run dev
+mise exec -- bun install --frozen-lockfile
+mise exec -- bun run dev
 ```
 
-- `bun run check`: sincroniza os tipos do SvelteKit, executa Vite+ check, svelte-check e TypeScript.
-- `bun run test`: testes unitários e de componentes com Vitest.
-- `bun run test:watch`: executa os testes em modo de observação.
-- `bun run lint`: lint com Oxlint, integrado pelo Vite+.
-- `bun run format`: formata arquivos do frontend, incluindo componentes Svelte, com Oxfmt.
-- `bun run format:check`: verifica formatação sem alterar arquivos.
-- `bun run build`: build de produção.
-- `bun run preview`: prévia local do build.
+A API padrão é `http://localhost:3000`. Para apontar para outra origem, copie `.env.example` para `.env`, ajuste `VITE_API_BASE_URL` e reinicie o servidor. A variável é pública no navegador. Configure o CORS da API para aceitar a origem em que o frontend roda. O sinal de status consulta `/health/live`. As páginas simuladas continuam navegáveis com a API desligada.
 
-As dependências resolvidas estão em `bun.lock`; `package-lock.json` foi removido para manter Bun como único gerenciador de pacotes. Vite+ integra Vite/Rolldown, Oxlint, Oxfmt e Vitest. `svelte-check` e TypeScript complementam `vp check` para verificar os componentes Svelte. Os testes de componentes usam Svelte Testing Library em ambiente jsdom. Consulte as [regras Svelte](../docs/rules/svelte.md) antes de implementar funcionalidades.
+## Comandos
 
-Validação da integração SvelteKit: `bun install --frozen-lockfile`, `bun run check`, `bun run test`, `bun run format:check` e `bun run build` passaram. O adapter automático concluiu o build, mas ainda não seleciona um destino de produção porque a hospedagem não foi definida.
+Execute os comandos na pasta `frontend/`. Use o prefixo `mise exec --` se Bun ainda não estiver disponível no terminal.
+
+| Comando                | Função                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| `bun run dev`          | Inicia o servidor de desenvolvimento.                                               |
+| `bun run check`        | Executa `vp check` e verifica os tipos com TypeScript.                              |
+| `bun run test`         | Executa testes de unidade e de componentes com Vitest, DOM Testing Library e jsdom. |
+| `bun run test:watch`   | Executa os testes em modo de observação.                                            |
+| `bun run lint`         | Executa Oxlint pelo Vite+.                                                          |
+| `bun run format`       | Formata TypeScript, TSX, CSS e configuração com Oxfmt.                              |
+| `bun run format:check` | Verifica formatação.                                                                |
+| `bun run build`        | Gera o build estático em `dist/`.                                                   |
+| `bun run preview`      | Abre uma prévia local do build.                                                     |
+
+## Estrutura
+
+- `src/main.tsx` monta a aplicação com `@solidjs/web`.
+- `src/App.tsx` registra as rotas no Solid Router. As páginas ficam em `src/routes/` e usam `@solidjs/meta` para metadados do documento.
+- `src/lib/components/` reúne componentes compartilhados. Os dados simulados ficam em `src/lib/prototype/` e a consulta à API Rust, em `src/lib/api/`.
+- `static/` contém os arquivos públicos, copiados para o build.
+
+## Hospedagem
+
+Sirva `dist/` com um servidor de arquivos estáticos e configure o fallback para `index.html` nas rotas da SPA. Isso permite abrir e recarregar endereços públicos como `/produto/blue-ceramic-vase`. Defina `VITE_API_BASE_URL` no ambiente do build e configure o CORS no backend. A hospedagem permanente ainda está em aberto.
+
+Consulte as [regras de SolidJS](../docs/rules/solid.md) antes de trabalhar no frontend.
